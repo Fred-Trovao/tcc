@@ -18,6 +18,7 @@ public class TestaConexao {
 		}finally{
 			try {
 				ConexaoPostgres.closeConexao(con);
+				System.out.println("COnexao fechada!");
 			} catch (TccException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
