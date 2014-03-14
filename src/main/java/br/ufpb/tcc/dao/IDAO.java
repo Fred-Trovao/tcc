@@ -2,16 +2,18 @@ package br.ufpb.tcc.dao;
 
 import java.util.List;
 
+import br.ufpb.tcc.util.TccException;
+
 public interface IDAO<T> {
-	void save(T entity);
+	void save(T entity) throws TccException;
 	 
-    void update(T entity);
+    void update(T entity) throws TccException;
  
-    void delete(T entity);
+    void delete(T entity) throws TccException;
  
-    T findOne(T entity);
+    T findOne(T entity) throws TccException;
  
-    List<T> findAll();
+    List<T> findAll() throws TccException ;
  
-    List<T> findKeyValue(T entity);
+    List<T> findKeyValue(T entity) throws TccException;
 }

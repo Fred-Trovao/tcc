@@ -6,6 +6,8 @@ public class Endereco {
 	
 	private String rua;
 	private String numero;
+	private String bairro;
+	private String cidade;
 	
 	public Integer getId() {
 		return id;
@@ -24,5 +26,17 @@ public class Endereco {
 	}
 	public void setNumero(String numero) {
 		this.numero = numero;
+	}
+	public String getBairro() {
+		return bairro;
+	}
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
+	public String getCidade() {
+		return cidade;
+	}
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
 	}
 }
