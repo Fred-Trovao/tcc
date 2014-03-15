@@ -6,6 +6,11 @@ public class UsuarioOperadora {
 	private Usuario usuario;
 	private Operadora operadora;
 	
+	public UsuarioOperadora(Usuario usuario, Operadora operadora){
+		this.usuario = usuario;
+		this.operadora = operadora;
+	}
+	
 	public Integer getId() {
 		return id;
 	}

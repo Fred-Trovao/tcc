@@ -13,7 +13,7 @@ import br.ufpb.tcc.dao.impl.UsuarioOperadoraDAOPostgres;
 
 public class DAOFactory {
 
-	public static UsuarioDAO criarUsuarioDAO(byte banco) {
+	public static UsuarioDAO criarUsuarioDAO(int banco) {
 
 		if (banco == Bancos.POSTGRES.ordinal()) {
 			return new UsuarioDAOPostgres();
@@ -21,7 +21,7 @@ public class DAOFactory {
 		return null;
 	}
 
-	public static PessoaDAO criarPessoaDAO(byte banco) {
+	public static PessoaDAO criarPessoaDAO(int banco) {
 
 		if (banco == Bancos.POSTGRES.ordinal()) {
 			return new PessoaDAOPostgres();
@@ -29,7 +29,7 @@ public class DAOFactory {
 		return null;
 	}
 
-	public static TelefoneDAO criarTelefoneDAO(byte banco) {
+	public static TelefoneDAO criarTelefoneDAO(int banco) {
 
 		if (banco == Bancos.POSTGRES.ordinal()) {
 			return new TelefoneDAOPostgres();
@@ -37,7 +37,7 @@ public class DAOFactory {
 		return null;
 	}
 
-	public static OperadoraDAO criarOperadoraDAO(byte banco) {
+	public static OperadoraDAO criarOperadoraDAO(int banco) {
 
 		if (banco == Bancos.POSTGRES.ordinal()) {
 			return new OperadoraDAOPostgres();
@@ -45,7 +45,7 @@ public class DAOFactory {
 		return null;
 	}
 
-	public static UsuarioOperadoraDAO criarUsuarioOperadoraDAO(byte banco) {
+	public static UsuarioOperadoraDAO criarUsuarioOperadoraDAO(int banco) {
 
 		if (banco == Bancos.POSTGRES.ordinal()) {
 			return new UsuarioOperadoraDAOPostgres();
