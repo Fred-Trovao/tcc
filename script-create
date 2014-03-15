@@ -1,36 +1,44 @@
 ﻿DROP TABLE IF EXISTS pessoa;
 DROP TABLE IF EXISTS telefone;
-DROP TABLE IF EXISTS endereco;
-DROP TABLE IF EXISTS operado;
+DROP TABLE IF EXISTS usuario;
+DROP TABLE IF EXISTS usuario_operadora;
+DROP TABLE IF EXISTS operadora;
 
-CREATE TABLE endereco
+CREATE TABLE usuario
 (
 id SERIAL NOT NULL,
-rua varchar(255) NOT NULL,
-numero varchar(11) NOT NULL,
-bairro varchar(50) NOT NULL,
-cidade varchar(50) NOT NULL,
-CONSTRAINT pk_endereco PRIMARY KEY (id)
-)
+login varchar(25) NOT NULL UNIQUE,
+senha varchar(20) NOT NULL,
+tipo INT,
+CONSTRAINT pk_usuario PRIMARY KEY (id)
+);
 
 CREATE TABLE pessoa
 (
 id SERIAL NOT NULL,
-id_endereco INTEGER,
+id_usuario INTEGER,
 nome varchar(255) NOT NULL,
 cpf varchar(11) NOT NULL,
 CONSTRAINT pk_pessoa PRIMARY KEY (id),
-CONSTRAINT fk_pessoa_endereco FOREIGN KEY (id_endereco) REFERENCES endereco(id)
-)
+CONSTRAINT fk_pessoa_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id)
+);
 
 CREATE TABLE operadora
 (
 id SERIAL NOT NULL,
-id_endereco INTEGER,
 razaoSocial varchar(50) NOT NULL,
-CONSTRAINT pk_operadora PRIMARY KEY (id),
-CONSTRAINT fk_operadora_endereco FOREIGN KEY (id_endereco) REFERENCES endereco(id)
-)
+CONSTRAINT pk_operadora PRIMARY KEY (id)
+);
+
+CREATE TABLE usuario_operadora
+(
+id SERIAL NOT NULL,
+id_usuario INTEGER,
+id_operadora INTEGER,
+CONSTRAINT pk_usuario_operadora PRIMARY KEY (id),
+CONSTRAINT fk_usuario_operadora_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id) ON DELETE RESTRICT,
+CONSTRAINT fk_usuario_operadora_operadora FOREIGN KEY (id_operadora) REFERENCES operadora(id) ON DELETE RESTRICT
+);
 
 CREATE TABLE telefone
 (
@@ -41,4 +49,4 @@ numero varchar(11) NOT NULL,
 CONSTRAINT pk_telefone PRIMARY KEY (id),
 CONSTRAINT fk_telefone_pessoa FOREIGN KEY (id_pessoa) REFERENCES pessoa(id) ON DELETE RESTRICT,
 CONSTRAINT fk_telefone_operadora FOREIGN KEY (id_operadora) REFERENCES operadora(id) ON DELETE RESTRICT
-)
+);

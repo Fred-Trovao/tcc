@@ -17,7 +17,7 @@ public class PessoaDAOPostgres implements PessoaDAO {
 	public void save(Pessoa entidade) throws TccException {
 		
 		if (entidade == null) {
-			String mensagem = "Não foi informado o socio a cadastrar.";
+			String mensagem = "Não foi informado a pessoa a cadastrar.";
 			throw new TccException(mensagem);
 		}
 		
@@ -25,10 +25,10 @@ public class PessoaDAOPostgres implements PessoaDAO {
 		PreparedStatement pstm = null;
 		try {
 			conn = ConexaoPostgres.getConexao();
-			String sql = "INSERT INTO pessoa (id_endereco, nome, cpf) VALUES (?)";
+			String sql = "INSERT INTO pessoa (id_usuario, nome, cpf) VALUES (?, ?, ?)";
         
             pstm = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            pstm.setInt(1, entidade.getEndereco().getId());
+            pstm.setInt(1, entidade.getUsuario().getId());
             pstm.setString(2, entidade.getNome());
             pstm.setString(3, entidade.getCpf());
             pstm.executeUpdate();
@@ -52,11 +52,11 @@ public class PessoaDAOPostgres implements PessoaDAO {
 		PreparedStatement pstm = null;
 		try {
 			conn = ConexaoPostgres.getConexao();
-			String sql = "UPDATE pessoa SET id_endereco = ?,"
+			String sql = "UPDATE pessoa SET id_usuario = ?,"
 					+ " nome = ?, cpf = ? WHERE id = ?";
         
             pstm = conn.prepareStatement(sql);
-            pstm.setInt(1, entidade.getEndereco().getId());
+            pstm.setInt(1, entidade.getUsuario().getId());
             pstm.setString(2, entidade.getNome());
             pstm.setString(3, entidade.getCpf());
             

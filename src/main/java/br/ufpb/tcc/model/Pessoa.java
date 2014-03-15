@@ -15,7 +15,7 @@ public class Pessoa implements Serializable {
 	private String cpf;
 	
 	private Set<Telefone> telefones;
-	private Endereco endereco;
+	private Usuario usuario;
 	
 	public Integer getId() {
 		return id;
@@ -35,11 +35,11 @@ public class Pessoa implements Serializable {
 	public void setTelefones(Set<Telefone> telefones) {
 		this.telefones = telefones;
 	}
-	public Endereco getEndereco() {
-		return endereco;
+	public Usuario getUsuario() {
+		return usuario;
 	}
-	public void setEndereco(Endereco endereco) {
-		this.endereco = endereco;
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 	public String getCpf() {
 		return cpf;

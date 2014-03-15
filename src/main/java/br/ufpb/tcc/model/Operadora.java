@@ -9,7 +9,6 @@ public class Operadora {
 	private String razaoSocial;
 	
 	private Set<Telefone> telefones;
-	private Endereco endereco;
 	
 	public Integer getId() {
 		return id;
@@ -28,12 +27,5 @@ public class Operadora {
 	}
 	public void setTelefones(Set<Telefone> telefones) {
 		this.telefones = telefones;
-	}
-	public Endereco getEndereco() {
-		return endereco;
-	}
-	public void setEndereco(Endereco endereco) {
-		this.endereco = endereco;
-	}
-		
+	}		
 }
