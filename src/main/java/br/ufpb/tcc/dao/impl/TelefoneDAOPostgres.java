@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import br.ufpb.tcc.dao.TelefoneDAO;
@@ -48,34 +49,125 @@ public class TelefoneDAOPostgres implements TelefoneDAO {
 	}
 
 	@Override
-	public void update(Telefone entity) throws TccException {
-		// TODO Auto-generated method stub
-
+	public void update(Telefone entidade) throws TccException {
+		Connection conn = null;
+		PreparedStatement pstm = null;
+		try {
+			conn = ConexaoPostgres.getConexao();
+			String sql = "UPDATE telefone SET id_pessoa = ?,"
+					+ " id_operadora = ?, numero = ? WHERE id = ?";
+        
+            pstm = conn.prepareStatement(sql);
+            pstm.setInt(1, entidade.getTitular().getId());
+            pstm.setInt(2, entidade.getOperadora().getId());
+            pstm.setString(3, entidade.getNumero());
+            
+            pstm.setInt(4, entidade.getId());
+            pstm.executeUpdate();            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConexaoPostgres.closeConexao(conn, pstm);
+        }
 	}
 
 	@Override
-	public void delete(Telefone entity) throws TccException {
-		// TODO Auto-generated method stub
-
+	public void delete(Telefone entidade) throws TccException {
+		Connection conn = null;
+		PreparedStatement pstm = null;
+		try {
+			conn = ConexaoPostgres.getConexao();
+			String sql = "DELETE FROM telefone WHERE id = ?";
+        
+            pstm = conn.prepareStatement(sql);
+            pstm.setInt(1, entidade.getId());
+            
+            pstm.executeUpdate();            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConexaoPostgres.closeConexao(conn, pstm);
+        }
 	}
 
 	@Override
-	public Telefone findOne(Telefone entity) throws TccException {
-		// TODO Auto-generated method stub
-		return null;
+	public Telefone findOne(Telefone entidade) throws TccException {
+		Connection conn = null;
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		
+		Telefone telefone = null;
+		
+		try {
+			conn = ConexaoPostgres.getConexao();
+        
+			String sql = "SELECT * FROM telefone WHERE id = ?";
+			            
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, entidade.getId());
+            
+			rs = pstm.executeQuery();
+            if(rs.next()) {
+                telefone = new Telefone();
+                telefone.setId(rs.getInt("id"));
+                telefone.setNumero(rs.getString("numero"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+        	ConexaoPostgres.closeConexao(conn, pstm, rs);
+        }
+		
+		return telefone;
 	}
 
 	@Override
 	public List<Telefone> findAll() throws TccException {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn = null;
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		List<Telefone> telefones = new ArrayList<Telefone>();
+		
+		try {
+			conn = ConexaoPostgres.getConexao();
+        
+			String sql = "SELECT * FROM telefone";
+			Telefone telefone = null;
+            
+			pstm = conn.prepareStatement(sql);
+            
+			rs = pstm.executeQuery();
+            while (rs.next()) {
+                telefone = new Telefone();
+                telefone.setId(rs.getInt("id"));
+                telefone.setNumero(rs.getString("numero"));
+ 
+                telefones.add(telefone);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+        	ConexaoPostgres.closeConexao(conn, pstm, rs);
+        }
+        return telefones;
 	}
 
 	@Override
-	public List<Telefone> findKeyValue(Telefone entity)
-			throws TccException {
-		// TODO Auto-generated method stub
-		return null;
+	public void deleteAll() throws TccException {
+		Connection conn = null;
+		PreparedStatement pstm = null;
+		try {
+			conn = ConexaoPostgres.getConexao();
+			String sql = "DELETE FROM telefone";
+        
+            pstm = conn.prepareStatement(sql);
+            
+            pstm.executeUpdate();            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConexaoPostgres.closeConexao(conn, pstm);
+        }
 	}
 
 }

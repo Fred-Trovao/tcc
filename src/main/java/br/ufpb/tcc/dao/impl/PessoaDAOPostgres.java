@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import br.ufpb.tcc.dao.PessoaDAO;
@@ -69,24 +70,103 @@ public class PessoaDAOPostgres implements PessoaDAO {
         }
 	}
 
-	public void delete(Pessoa entity) {
-		// TODO Auto-generated method stub
-
+	public void delete(Pessoa entidade) throws TccException {
+		Connection conn = null;
+		PreparedStatement pstm = null;
+		try {
+			conn = ConexaoPostgres.getConexao();
+			String sql = "DELETE FROM pessoa WHERE id = ?";
+        
+            pstm = conn.prepareStatement(sql);
+            pstm.setInt(1, entidade.getId());
+            
+            pstm.executeUpdate();            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConexaoPostgres.closeConexao(conn, pstm);
+        }
 	}
 
-	public Pessoa findOne(Pessoa entity) {
-		// TODO Auto-generated method stub
-		return null;
+	public Pessoa findOne(Pessoa entidade) throws TccException {
+		Connection conn = null;
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		
+		Pessoa pessoa = null;
+		
+		try {
+			conn = ConexaoPostgres.getConexao();
+        
+			String sql = "SELECT * FROM pessoa WHERE id = ?";
+			            
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, entidade.getId());
+            
+			rs = pstm.executeQuery();
+            if(rs.next()) {
+                pessoa = new Pessoa();
+                pessoa.setId(rs.getInt("id"));
+                pessoa.setNome(rs.getString("nome"));
+                pessoa.setCpf(rs.getString("cpf"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+        	ConexaoPostgres.closeConexao(conn, pstm, rs);
+        }
+		
+		return pessoa;
 	}
 
-	public List<Pessoa> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Pessoa> findAll() throws TccException {
+		
+		Connection conn = null;
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		List<Pessoa> pessoas = new ArrayList<Pessoa>();
+		
+		try {
+			conn = ConexaoPostgres.getConexao();
+        
+			String sql = "SELECT * FROM pessoa";
+			Pessoa pessoa = null;
+            
+			pstm = conn.prepareStatement(sql);
+            
+			rs = pstm.executeQuery();
+            while (rs.next()) {
+                pessoa = new Pessoa();
+                pessoa.setId(rs.getInt("id"));
+                pessoa.setNome(rs.getString("nome"));
+                pessoa.setCpf(rs.getString("cpf"));
+ 
+                pessoas.add(pessoa);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+        	ConexaoPostgres.closeConexao(conn, pstm, rs);
+        }
+        return pessoas;
 	}
 
-	public List<Pessoa> findKeyValue(Pessoa entity) {
-		// TODO Auto-generated method stub
-		return null;
+	@Override
+	public void deleteAll() throws TccException {
+		Connection conn = null;
+		PreparedStatement pstm = null;
+		try {
+			conn = ConexaoPostgres.getConexao();
+			String sql = "DELETE FROM pessoa";
+        
+            pstm = conn.prepareStatement(sql);
+            
+            pstm.executeUpdate();            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConexaoPostgres.closeConexao(conn, pstm);
+        }		
 	}
 
 }

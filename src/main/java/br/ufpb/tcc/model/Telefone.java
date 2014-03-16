@@ -10,6 +10,9 @@ public class Telefone {
 	private Pessoa titular;
 	private Operadora operadora;
 	
+	public Telefone(){
+	}
+	
 	public Telefone(Pessoa titular, Operadora operadora){
 		this.titular = titular;
 		this.operadora = operadora;

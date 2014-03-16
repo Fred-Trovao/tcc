@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.List;
 
 import br.ufpb.tcc.dao.UsuarioOperadoraDAO;
+import br.ufpb.tcc.model.Pessoa;
 import br.ufpb.tcc.model.UsuarioOperadora;
 import br.ufpb.tcc.util.ConexaoPostgres;
 import br.ufpb.tcc.util.TccException;
@@ -48,21 +49,49 @@ public class UsuarioOperadoraDAOPostgres implements UsuarioOperadoraDAO {
 	}
 
 	@Override
-	public void update(UsuarioOperadora entity) throws TccException {
-		// TODO Auto-generated method stub
-
+	public void update(UsuarioOperadora entidade) throws TccException {
+		Connection conn = null;
+		PreparedStatement pstm = null;
+		try {
+			conn = ConexaoPostgres.getConexao();
+			String sql = "UPDATE usuario_operadora SET id_usuario = ?,"
+					+ " id_operadora = ? WHERE id = ?";
+        
+            pstm = conn.prepareStatement(sql);
+            pstm.setInt(1, entidade.getUsuario().getId());
+            pstm.setInt(1, entidade.getOperadora().getId());
+                        
+            pstm.setInt(3, entidade.getId());
+            pstm.executeUpdate();            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConexaoPostgres.closeConexao(conn, pstm);
+        }
 	}
 
 	@Override
-	public void delete(UsuarioOperadora entity) throws TccException {
-		// TODO Auto-generated method stub
-
+	public void delete(UsuarioOperadora entidade) throws TccException {
+		Connection conn = null;
+		PreparedStatement pstm = null;
+		try {
+			conn = ConexaoPostgres.getConexao();
+			String sql = "DELETE FROM usuario_operadora WHERE id = ?";
+        
+            pstm = conn.prepareStatement(sql);
+            pstm.setInt(1, entidade.getId());
+            
+            pstm.executeUpdate();            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConexaoPostgres.closeConexao(conn, pstm);
+        }
 	}
 
 	@Override
-	public UsuarioOperadora findOne(UsuarioOperadora entity)
+	public UsuarioOperadora findOne(UsuarioOperadora entidade)
 			throws TccException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -73,10 +102,21 @@ public class UsuarioOperadoraDAOPostgres implements UsuarioOperadoraDAO {
 	}
 
 	@Override
-	public List<UsuarioOperadora> findKeyValue(UsuarioOperadora entity)
-			throws TccException {
-		// TODO Auto-generated method stub
-		return null;
+	public void deleteAll() throws TccException {
+		Connection conn = null;
+		PreparedStatement pstm = null;
+		try {
+			conn = ConexaoPostgres.getConexao();
+			String sql = "DELETE FROM usuario_operadora";
+        
+            pstm = conn.prepareStatement(sql);
+            
+            pstm.executeUpdate();            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConexaoPostgres.closeConexao(conn, pstm);
+        }		
 	}
 
 }

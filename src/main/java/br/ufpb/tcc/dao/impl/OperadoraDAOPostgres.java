@@ -5,10 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import br.ufpb.tcc.dao.OperadoraDAO;
 import br.ufpb.tcc.model.Operadora;
+import br.ufpb.tcc.model.Pessoa;
 import br.ufpb.tcc.util.ConexaoPostgres;
 import br.ufpb.tcc.util.TccException;
 
@@ -46,33 +48,123 @@ public class OperadoraDAOPostgres implements OperadoraDAO {
 	}
 
 	@Override
-	public void update(Operadora entity) throws TccException {
-		// TODO Auto-generated method stub
+	public void update(Operadora entidade) throws TccException {
+		Connection conn = null;
+		PreparedStatement pstm = null;
+		try {
+			conn = ConexaoPostgres.getConexao();
+			String sql = "UPDATE operadora SET razaosocial = ? WHERE id = ?";
+        
+            pstm = conn.prepareStatement(sql);
+            pstm.setString(1, entidade.getRazaoSocial());
+            pstm.setInt(2, entidade.getId());
+            
+            pstm.executeUpdate();            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConexaoPostgres.closeConexao(conn, pstm);
+        }
+	}
+
+	@Override
+	public void delete(Operadora entidade) throws TccException {
+		Connection conn = null;
+		PreparedStatement pstm = null;
+		try {
+			conn = ConexaoPostgres.getConexao();
+			String sql = "DELETE FROM operadora WHERE id = ?";
+        
+            pstm = conn.prepareStatement(sql);
+            pstm.setInt(1, entidade.getId());
+            
+            pstm.executeUpdate();            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConexaoPostgres.closeConexao(conn, pstm);
+        }
 
 	}
 
 	@Override
-	public void delete(Operadora entity) throws TccException {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public Operadora findOne(Operadora entity) throws TccException {
-		// TODO Auto-generated method stub
-		return null;
+	public Operadora findOne(Operadora entidade) throws TccException {
+		Connection conn = null;
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		
+		Operadora operadora = null;
+		
+		try {
+			conn = ConexaoPostgres.getConexao();
+        
+			String sql = "SELECT * FROM operadora WHERE id = ?";
+			            
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, entidade.getId());
+            
+			rs = pstm.executeQuery();
+            if(rs.next()) {
+                operadora = new Operadora();
+                operadora.setId(rs.getInt("id"));
+                operadora.setRazaoSocial(rs.getString("razaosocial"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+        	ConexaoPostgres.closeConexao(conn, pstm, rs);
+        }
+		
+		return operadora;
 	}
 
 	@Override
 	public List<Operadora> findAll() throws TccException {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn = null;
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		List<Operadora> operadoras = new ArrayList<Operadora>();
+		
+		try {
+			conn = ConexaoPostgres.getConexao();
+        
+			String sql = "SELECT * FROM operadora";
+			Operadora operadora = null;
+            
+			pstm = conn.prepareStatement(sql);
+            
+			rs = pstm.executeQuery();
+            while (rs.next()) {
+                operadora = new Operadora();
+                operadora.setId(rs.getInt("id"));
+                operadora.setRazaoSocial(rs.getString("razaosocial"));
+                 
+                operadoras.add(operadora);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+        	ConexaoPostgres.closeConexao(conn, pstm, rs);
+        }
+        return operadoras;
 	}
 
 	@Override
-	public List<Operadora> findKeyValue(Operadora entity) throws TccException {
-		// TODO Auto-generated method stub
-		return null;
+	public void deleteAll() throws TccException {
+		Connection conn = null;
+		PreparedStatement pstm = null;
+		try {
+			conn = ConexaoPostgres.getConexao();
+			String sql = "DELETE FROM operadora";
+        
+            pstm = conn.prepareStatement(sql);
+            
+            pstm.executeUpdate();            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConexaoPostgres.closeConexao(conn, pstm);
+        }		
 	}
 
 }
