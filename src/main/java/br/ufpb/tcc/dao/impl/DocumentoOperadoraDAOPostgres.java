@@ -7,18 +7,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-import br.ufpb.tcc.dao.UsuarioOperadoraDAO;
-import br.ufpb.tcc.model.Pessoa;
-import br.ufpb.tcc.model.UsuarioOperadora;
+import br.ufpb.tcc.dao.DocumentoOperadoraDAO;
+import br.ufpb.tcc.model.DocumentoOperadora;
 import br.ufpb.tcc.util.ConexaoPostgres;
 import br.ufpb.tcc.util.TccException;
 
-public class UsuarioOperadoraDAOPostgres implements UsuarioOperadoraDAO {
+public class DocumentoOperadoraDAOPostgres implements DocumentoOperadoraDAO {
 
-	@Override
-	public void save(UsuarioOperadora entidade) throws TccException {
+	public void save(DocumentoOperadora entidade) throws TccException {
 		if (entidade == null) {
-			String mensagem = "Não foi informado o usuarioOperadora a cadastrar.";
+			String mensagem = "Não foi informado o documentoOperadora a cadastrar.";
 			throw new TccException(mensagem);
 		}
 
@@ -26,10 +24,10 @@ public class UsuarioOperadoraDAOPostgres implements UsuarioOperadoraDAO {
 		PreparedStatement pstm = null;
 		try {
 			conn = ConexaoPostgres.getConexao();
-			String sql = "INSERT INTO usuario_operadora (id_usuario, id_operadora) VALUES (?, ?)";
+			String sql = "INSERT INTO documento_operadora (id_documento, id_operadora) VALUES (?, ?)";
 
 			pstm = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			pstm.setInt(1, entidade.getUsuario().getId());
+			pstm.setInt(1, entidade.getDocumento().getId());
 			pstm.setInt(2, entidade.getOperadora().getId());
 			pstm.executeUpdate();
 
@@ -48,17 +46,16 @@ public class UsuarioOperadoraDAOPostgres implements UsuarioOperadoraDAO {
 
 	}
 
-	@Override
-	public void update(UsuarioOperadora entidade) throws TccException {
+	public void update(DocumentoOperadora entidade) throws TccException {
 		Connection conn = null;
 		PreparedStatement pstm = null;
 		try {
 			conn = ConexaoPostgres.getConexao();
-			String sql = "UPDATE usuario_operadora SET id_usuario = ?,"
+			String sql = "UPDATE documento_operadora SET id_documento = ?,"
 					+ " id_operadora = ? WHERE id = ?";
         
             pstm = conn.prepareStatement(sql);
-            pstm.setInt(1, entidade.getUsuario().getId());
+            pstm.setInt(1, entidade.getDocumento().getId());
             pstm.setInt(1, entidade.getOperadora().getId());
                         
             pstm.setInt(3, entidade.getId());
@@ -70,13 +67,12 @@ public class UsuarioOperadoraDAOPostgres implements UsuarioOperadoraDAO {
         }
 	}
 
-	@Override
-	public void delete(UsuarioOperadora entidade) throws TccException {
+	public void delete(DocumentoOperadora entidade) throws TccException {
 		Connection conn = null;
 		PreparedStatement pstm = null;
 		try {
 			conn = ConexaoPostgres.getConexao();
-			String sql = "DELETE FROM usuario_operadora WHERE id = ?";
+			String sql = "DELETE FROM documento_operadora WHERE id = ?";
         
             pstm = conn.prepareStatement(sql);
             pstm.setInt(1, entidade.getId());
@@ -89,25 +85,22 @@ public class UsuarioOperadoraDAOPostgres implements UsuarioOperadoraDAO {
         }
 	}
 
-	@Override
-	public UsuarioOperadora findOne(UsuarioOperadora entidade)
+	public DocumentoOperadora findOne(DocumentoOperadora entidade)
 			throws TccException {
 		return null;
 	}
 
-	@Override
-	public List<UsuarioOperadora> findAll() throws TccException {
+	public List<DocumentoOperadora> findAll() throws TccException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public void deleteAll() throws TccException {
 		Connection conn = null;
 		PreparedStatement pstm = null;
 		try {
 			conn = ConexaoPostgres.getConexao();
-			String sql = "DELETE FROM usuario_operadora";
+			String sql = "DELETE FROM documento_operadora";
         
             pstm = conn.prepareStatement(sql);
             

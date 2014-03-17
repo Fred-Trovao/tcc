@@ -33,7 +33,6 @@ public class PessoaDAOMongoDB implements PessoaDAO{
 		return null;
 	}
 
-	@Override
 	public void deleteAll() throws TccException {
 		// TODO Auto-generated method stub
 		

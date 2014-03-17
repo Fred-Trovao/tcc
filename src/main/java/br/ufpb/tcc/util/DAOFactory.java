@@ -3,20 +3,20 @@ package br.ufpb.tcc.util;
 import br.ufpb.tcc.dao.OperadoraDAO;
 import br.ufpb.tcc.dao.PessoaDAO;
 import br.ufpb.tcc.dao.TelefoneDAO;
-import br.ufpb.tcc.dao.UsuarioDAO;
-import br.ufpb.tcc.dao.UsuarioOperadoraDAO;
+import br.ufpb.tcc.dao.DocumentoDAO;
+import br.ufpb.tcc.dao.DocumentoOperadoraDAO;
 import br.ufpb.tcc.dao.impl.OperadoraDAOPostgres;
 import br.ufpb.tcc.dao.impl.PessoaDAOPostgres;
 import br.ufpb.tcc.dao.impl.TelefoneDAOPostgres;
-import br.ufpb.tcc.dao.impl.UsuarioDAOPostgres;
-import br.ufpb.tcc.dao.impl.UsuarioOperadoraDAOPostgres;
+import br.ufpb.tcc.dao.impl.DocumentoDAOPostgres;
+import br.ufpb.tcc.dao.impl.DocumentoOperadoraDAOPostgres;
 
 public class DAOFactory {
 
-	public static UsuarioDAO criarUsuarioDAO(int banco) {
+	public static DocumentoDAO criarDocumentoDAO(int banco) {
 
 		if (banco == Bancos.POSTGRES.ordinal()) {
-			return new UsuarioDAOPostgres();
+			return new DocumentoDAOPostgres();
 		}
 		return null;
 	}
@@ -45,10 +45,10 @@ public class DAOFactory {
 		return null;
 	}
 
-	public static UsuarioOperadoraDAO criarUsuarioOperadoraDAO(int banco) {
+	public static DocumentoOperadoraDAO criarDocumentoOperadoraDAO(int banco) {
 
 		if (banco == Bancos.POSTGRES.ordinal()) {
-			return new UsuarioOperadoraDAOPostgres();
+			return new DocumentoOperadoraDAOPostgres();
 		}
 		return null;
 	}

@@ -1,13 +1,13 @@
 package br.ufpb.tcc.model;
 
-public class UsuarioOperadora {
+public class DocumentoOperadora {
 	
 	private Integer id;
-	private Usuario usuario;
+	private Documento documento;
 	private Operadora operadora;
 	
-	public UsuarioOperadora(Usuario usuario, Operadora operadora){
-		this.usuario = usuario;
+	public DocumentoOperadora(Documento documento, Operadora operadora){
+		this.documento = documento;
 		this.operadora = operadora;
 	}
 	
@@ -17,11 +17,11 @@ public class UsuarioOperadora {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public Usuario getUsuario() {
-		return usuario;
+	public Documento getDocumento() {
+		return documento;
 	}
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setDocumento(Documento documento) {
+		this.documento = documento;
 	}
 	public Operadora getOperadora() {
 		return operadora;

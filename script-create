@@ -1,26 +1,25 @@
 ﻿DROP TABLE IF EXISTS pessoa;
 DROP TABLE IF EXISTS telefone;
-DROP TABLE IF EXISTS usuario;
-DROP TABLE IF EXISTS usuario_operadora;
+DROP TABLE IF EXISTS documento;
+DROP TABLE IF EXISTS documento_operadora;
 DROP TABLE IF EXISTS operadora;
 
-CREATE TABLE usuario
+CREATE TABLE documento
 (
 id SERIAL NOT NULL,
-login varchar(25) NOT NULL UNIQUE,
-senha varchar(20) NOT NULL,
+numero varchar(25) NOT NULL UNIQUE,
 tipo INT,
-CONSTRAINT pk_usuario PRIMARY KEY (id)
+CONSTRAINT pk_documento PRIMARY KEY (id)
 );
 
 CREATE TABLE pessoa
 (
 id SERIAL NOT NULL,
-id_usuario INTEGER,
+id_documento INTEGER,
 nome varchar(255) NOT NULL,
-cpf varchar(11) NOT NULL,
+nascimento varchar(11) NOT NULL,
 CONSTRAINT pk_pessoa PRIMARY KEY (id),
-CONSTRAINT fk_pessoa_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id)
+CONSTRAINT fk_pessoa_documento FOREIGN KEY (id_documento) REFERENCES documento(id)
 );
 
 CREATE TABLE operadora
@@ -30,14 +29,14 @@ razaoSocial varchar(50) NOT NULL,
 CONSTRAINT pk_operadora PRIMARY KEY (id)
 );
 
-CREATE TABLE usuario_operadora
+CREATE TABLE documento_operadora
 (
 id SERIAL NOT NULL,
-id_usuario INTEGER,
+id_documento INTEGER,
 id_operadora INTEGER,
-CONSTRAINT pk_usuario_operadora PRIMARY KEY (id),
-CONSTRAINT fk_usuario_operadora_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id) ON DELETE RESTRICT,
-CONSTRAINT fk_usuario_operadora_operadora FOREIGN KEY (id_operadora) REFERENCES operadora(id) ON DELETE RESTRICT
+CONSTRAINT pk_documento_operadora PRIMARY KEY (id),
+CONSTRAINT fk_documento_operadora_documento FOREIGN KEY (id_documento) REFERENCES documento(id) ON DELETE RESTRICT,
+CONSTRAINT fk_documento_operadora_operadora FOREIGN KEY (id_operadora) REFERENCES operadora(id) ON DELETE RESTRICT
 );
 
 CREATE TABLE telefone

@@ -1,6 +1,7 @@
 package br.ufpb.tcc.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
 public class Pessoa implements Serializable {
@@ -12,10 +13,10 @@ public class Pessoa implements Serializable {
 	
 	private Integer id;
 	private String nome;
-	private String cpf;
+	private Date nascimento;
 	
 	private Set<Telefone> telefones;
-	private Usuario usuario;
+	private Documento documento;
 	
 	public Integer getId() {
 		return id;
@@ -35,16 +36,16 @@ public class Pessoa implements Serializable {
 	public void setTelefones(Set<Telefone> telefones) {
 		this.telefones = telefones;
 	}
-	public Usuario getUsuario() {
-		return usuario;
+	public Documento getDocumento() {
+		return documento;
 	}
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setDocumento(Documento documento) {
+		this.documento = documento;
 	}
-	public String getCpf() {
-		return cpf;
+	public Date getNascimento() {
+		return nascimento;
 	}
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
+	public void setNascimento(Date nascimento) {
+		this.nascimento = nascimento;
 	}
 }

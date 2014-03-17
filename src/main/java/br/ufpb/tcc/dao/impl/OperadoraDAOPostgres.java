@@ -10,13 +10,11 @@ import java.util.List;
 
 import br.ufpb.tcc.dao.OperadoraDAO;
 import br.ufpb.tcc.model.Operadora;
-import br.ufpb.tcc.model.Pessoa;
 import br.ufpb.tcc.util.ConexaoPostgres;
 import br.ufpb.tcc.util.TccException;
 
 public class OperadoraDAOPostgres implements OperadoraDAO {
 
-	@Override
 	public void save(Operadora entidade) throws TccException {
 		if (entidade == null) {
 			String mensagem = "Não foi informado a operadora a cadastrar.";
@@ -47,7 +45,6 @@ public class OperadoraDAOPostgres implements OperadoraDAO {
 		}
 	}
 
-	@Override
 	public void update(Operadora entidade) throws TccException {
 		Connection conn = null;
 		PreparedStatement pstm = null;
@@ -67,7 +64,6 @@ public class OperadoraDAOPostgres implements OperadoraDAO {
         }
 	}
 
-	@Override
 	public void delete(Operadora entidade) throws TccException {
 		Connection conn = null;
 		PreparedStatement pstm = null;
@@ -87,7 +83,6 @@ public class OperadoraDAOPostgres implements OperadoraDAO {
 
 	}
 
-	@Override
 	public Operadora findOne(Operadora entidade) throws TccException {
 		Connection conn = null;
 		PreparedStatement pstm = null;
@@ -118,7 +113,6 @@ public class OperadoraDAOPostgres implements OperadoraDAO {
 		return operadora;
 	}
 
-	@Override
 	public List<Operadora> findAll() throws TccException {
 		Connection conn = null;
 		PreparedStatement pstm = null;
@@ -149,7 +143,6 @@ public class OperadoraDAOPostgres implements OperadoraDAO {
         return operadoras;
 	}
 
-	@Override
 	public void deleteAll() throws TccException {
 		Connection conn = null;
 		PreparedStatement pstm = null;
@@ -166,5 +159,4 @@ public class OperadoraDAOPostgres implements OperadoraDAO {
             ConexaoPostgres.closeConexao(conn, pstm);
         }		
 	}
-
 }

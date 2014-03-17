@@ -26,12 +26,12 @@ public class PessoaDAOPostgres implements PessoaDAO {
 		PreparedStatement pstm = null;
 		try {
 			conn = ConexaoPostgres.getConexao();
-			String sql = "INSERT INTO pessoa (id_usuario, nome, cpf) VALUES (?, ?, ?)";
+			String sql = "INSERT INTO pessoa (id_documento, nome, nascimento) VALUES (?, ?, ?)";
         
             pstm = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            pstm.setInt(1, entidade.getUsuario().getId());
+            pstm.setInt(1, entidade.getDocumento().getId());
             pstm.setString(2, entidade.getNome());
-            pstm.setString(3, entidade.getCpf());
+            pstm.setString(3, entidade.getNascimento());
             pstm.executeUpdate();
             
             //recuperar o ResultSet
@@ -53,13 +53,13 @@ public class PessoaDAOPostgres implements PessoaDAO {
 		PreparedStatement pstm = null;
 		try {
 			conn = ConexaoPostgres.getConexao();
-			String sql = "UPDATE pessoa SET id_usuario = ?,"
-					+ " nome = ?, cpf = ? WHERE id = ?";
+			String sql = "UPDATE pessoa SET id_documento = ?,"
+					+ " nome = ?, nascimento = ? WHERE id = ?";
         
             pstm = conn.prepareStatement(sql);
-            pstm.setInt(1, entidade.getUsuario().getId());
+            pstm.setInt(1, entidade.getDocumento().getId());
             pstm.setString(2, entidade.getNome());
-            pstm.setString(3, entidade.getCpf());
+            pstm.setString(3, entidade.getNascimento());
             
             pstm.setInt(4, entidade.getId());
             pstm.executeUpdate();            
@@ -108,7 +108,7 @@ public class PessoaDAOPostgres implements PessoaDAO {
                 pessoa = new Pessoa();
                 pessoa.setId(rs.getInt("id"));
                 pessoa.setNome(rs.getString("nome"));
-                pessoa.setCpf(rs.getString("cpf"));
+                pessoa.setNascimento(rs.getString("nascimento"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -139,7 +139,7 @@ public class PessoaDAOPostgres implements PessoaDAO {
                 pessoa = new Pessoa();
                 pessoa.setId(rs.getInt("id"));
                 pessoa.setNome(rs.getString("nome"));
-                pessoa.setCpf(rs.getString("cpf"));
+                pessoa.setNascimento(rs.getString("nascimento"));
  
                 pessoas.add(pessoa);
             }
@@ -151,7 +151,6 @@ public class PessoaDAOPostgres implements PessoaDAO {
         return pessoas;
 	}
 
-	@Override
 	public void deleteAll() throws TccException {
 		Connection conn = null;
 		PreparedStatement pstm = null;

@@ -15,7 +15,6 @@ import br.ufpb.tcc.util.TccException;
 
 public class TelefoneDAOPostgres implements TelefoneDAO {
 
-	@Override
 	public void save(Telefone entidade) throws TccException {
 		if (entidade == null) {
 			String mensagem = "Não foi informado o telefone a cadastrar.";
@@ -48,7 +47,6 @@ public class TelefoneDAOPostgres implements TelefoneDAO {
 		}
 	}
 
-	@Override
 	public void update(Telefone entidade) throws TccException {
 		Connection conn = null;
 		PreparedStatement pstm = null;
@@ -71,7 +69,6 @@ public class TelefoneDAOPostgres implements TelefoneDAO {
         }
 	}
 
-	@Override
 	public void delete(Telefone entidade) throws TccException {
 		Connection conn = null;
 		PreparedStatement pstm = null;
@@ -90,7 +87,6 @@ public class TelefoneDAOPostgres implements TelefoneDAO {
         }
 	}
 
-	@Override
 	public Telefone findOne(Telefone entidade) throws TccException {
 		Connection conn = null;
 		PreparedStatement pstm = null;
@@ -121,7 +117,6 @@ public class TelefoneDAOPostgres implements TelefoneDAO {
 		return telefone;
 	}
 
-	@Override
 	public List<Telefone> findAll() throws TccException {
 		Connection conn = null;
 		PreparedStatement pstm = null;
@@ -152,7 +147,6 @@ public class TelefoneDAOPostgres implements TelefoneDAO {
         return telefones;
 	}
 
-	@Override
 	public void deleteAll() throws TccException {
 		Connection conn = null;
 		PreparedStatement pstm = null;
