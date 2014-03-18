@@ -64,9 +64,15 @@ public class Pessoa implements Serializable {
 	}
 	
 	public void addTelefone(Telefone telefone){
-		this.telefones.add(telefone);
+		if(telefone != null){
+			telefone.setTitular(this);
+			this.telefones.add(telefone);
+		}
 	}
 	public void removeTelefone(Telefone telefone){
-		this.telefones.remove(telefone);
+		if(telefone != null){
+			telefone.setTitular(null);
+			this.telefones.remove(telefone);
+		}
 	}
 }

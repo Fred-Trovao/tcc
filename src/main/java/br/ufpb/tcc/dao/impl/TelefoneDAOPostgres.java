@@ -20,7 +20,17 @@ public class TelefoneDAOPostgres implements TelefoneDAO {
 			String mensagem = "Não foi informado o telefone a cadastrar.";
 			throw new TccException(mensagem);
 		}
-
+		
+		if(entidade.getOperadora() == null){
+			String mensagem = "Não foi informado o titular do telefone a cadastrar.";
+			throw new TccException(mensagem);
+		}
+		
+		if(entidade.getOperadora() == null){
+			String mensagem = "Não foi informado a operadora do telefone a cadastrar.";
+			throw new TccException(mensagem);
+		}
+		
 		Connection conn = null;
 		PreparedStatement pstm = null;
 		try {

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.ufpb.tcc.dao.PessoaDAO;
+import br.ufpb.tcc.model.Documento;
 import br.ufpb.tcc.model.Pessoa;
 import br.ufpb.tcc.util.ConexaoPostgres;
 import br.ufpb.tcc.util.TccException;
@@ -21,6 +22,19 @@ public class PessoaDAOPostgres implements PessoaDAO {
 		if (entidade == null) {
 			String mensagem = "Não foi informado a pessoa a cadastrar.";
 			throw new TccException(mensagem);
+		}
+		
+		if(entidade.getDocumento() == null){
+			String mensagem = "Não foi informado o documento da pessoa a cadastrar.";
+			throw new TccException(mensagem);
+		}
+		
+		if(entidade.getDocumento().getId() == null){
+			DocumentoDAOPostgres ddp = new DocumentoDAOPostgres();
+			
+			Documento doc = entidade.getDocumento();
+			
+			ddp.save(doc);
 		}
 		
 		Connection conn = null;

@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.ufpb.tcc.dao.OperadoraDAO;
+import br.ufpb.tcc.model.Documento;
+import br.ufpb.tcc.model.DocumentoOperadora;
 import br.ufpb.tcc.model.Operadora;
 import br.ufpb.tcc.util.ConexaoPostgres;
 import br.ufpb.tcc.util.TccException;
@@ -20,7 +22,12 @@ public class OperadoraDAOPostgres implements OperadoraDAO {
 			String mensagem = "Não foi informado a operadora a cadastrar.";
 			throw new TccException(mensagem);
 		}
-
+		
+		if(entidade.getDocumentos() == null || entidade.getDocumentos().isEmpty()){
+			String mensagem = "Não foi informado o(s) documento(s) da operadora a cadastrar.";
+			throw new TccException(mensagem);
+		}
+		
 		Connection conn = null;
 		PreparedStatement pstm = null;
 		try {
@@ -37,7 +44,20 @@ public class OperadoraDAOPostgres implements OperadoraDAO {
 			int id = rs.getInt(1); // <= o valor do campo está aqui
 
 			entidade.setId(id);
-
+			
+			for(Documento doc : entidade.getDocumentos()){
+				
+				if(doc.getId() == null){
+					DocumentoDAOPostgres ddp = new DocumentoDAOPostgres();				
+					ddp.save(doc);
+				}
+				
+				DocumentoOperadoraDAOPostgres dodp = new DocumentoOperadoraDAOPostgres();
+				DocumentoOperadora docOp = new DocumentoOperadora(doc, entidade);
+				
+				dodp.save(docOp);
+			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

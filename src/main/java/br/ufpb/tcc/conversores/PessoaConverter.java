@@ -2,18 +2,12 @@ package br.ufpb.tcc.conversores;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import br.ufpb.tcc.model.Documento;
-import br.ufpb.tcc.model.Operadora;
 import br.ufpb.tcc.model.Pessoa;
 import br.ufpb.tcc.model.Telefone;
 
 import com.mongodb.BasicDBList;
-import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
 public class PessoaConverter {
