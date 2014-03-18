@@ -2,17 +2,26 @@ package br.ufpb.tcc.model;
 
 public class Documento {
 
-	private Integer id;
+	private String id;
 	
 	private String numero;
 	private byte tipo;
 		
 	public Integer getId() {
-		return id;
+		return Integer.parseInt(id);
 	}
 	public void setId(Integer id) {
+		this.id = "" + id;
+	}
+	
+	public String getIdString() {
+		return id;
+	}
+	
+	public void setId(String id) {
 		this.id = id;
 	}
+	
 	public String getNumero() {
 		return numero;
 	}

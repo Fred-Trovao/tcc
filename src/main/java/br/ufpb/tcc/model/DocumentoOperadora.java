@@ -2,7 +2,7 @@ package br.ufpb.tcc.model;
 
 public class DocumentoOperadora {
 	
-	private Integer id;
+	private String id;
 	private Documento documento;
 	private Operadora operadora;
 	
@@ -12,11 +12,20 @@ public class DocumentoOperadora {
 	}
 	
 	public Integer getId() {
-		return id;
+		return Integer.parseInt(id);
 	}
 	public void setId(Integer id) {
+		this.id = "" + id;
+	}
+	
+	public String getIdString() {
+		return id;
+	}
+	
+	public void setId(String id) {
 		this.id = id;
 	}
+	
 	public Documento getDocumento() {
 		return documento;
 	}

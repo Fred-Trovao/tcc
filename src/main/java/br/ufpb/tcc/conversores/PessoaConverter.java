@@ -2,11 +2,18 @@ package br.ufpb.tcc.conversores;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import br.ufpb.tcc.model.Documento;
+import br.ufpb.tcc.model.Operadora;
 import br.ufpb.tcc.model.Pessoa;
+import br.ufpb.tcc.model.Telefone;
 
-import com.mongodb.DBCollection;
+import com.mongodb.BasicDBList;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
 public class PessoaConverter {
@@ -14,20 +21,37 @@ public class PessoaConverter {
         Map<String, Object> mapPessoa = new HashMap<String, Object>();
         mapPessoa.put("nome", pessoa.getNome());
         mapPessoa.put("nascimento", pessoa.getNascimento());
-        mapPessoa.put("documento", pessoa.getDocumento());
-  //      mapPessoa.put("telefones", )
+        mapPessoa.put("documento", 
+        		new DocumentoConverter().converterToMap(pessoa.getDocumento()));
+                
+        BasicDBList dbList = new BasicDBList();
         
- 
+        for(Telefone telefone : pessoa.getTelefones()){
+        	dbList.add(new TelefoneConverter().converterToMap(telefone));	
+        }
+        
+        mapPessoa.put("telefones", dbList);
+       
         return mapPessoa;
     }
  
     public Pessoa converterToPessoa(DBObject dbo) {
         Pessoa pessoa = new Pessoa();
-        pessoa.setId(Integer.parseInt(dbo.get("_id").toString()));
-        pessoa.setNome((String) dbo.get("firstName"));
-        pessoa.setNascimento(new Date(Date.parse((String) dbo.get("lastName"))));
-//        pessoa.setDocumento(((Documento) dbo.get("Documento"));
-       
+        //pessoa.setId(dbo.get("_id").toString());
+        pessoa.setNome((String) dbo.get("nome"));
+        pessoa.setNascimento((Date) dbo.get("nascimento"));
+        
+        pessoa.setDocumento(new DocumentoConverter().converterToDocumento((HashMap<String, Object>) dbo.get("documento")));
+        
+        BasicDBList basicDBList = (BasicDBList) dbo.get("telefones");
+        
+        for (Object basicDBObject : basicDBList) {
+            Telefone telefone = new TelefoneConverter().converterToTelefone((HashMap<String, Object>)basicDBObject);
+            telefone.setTitular(pessoa);            
+            
+            pessoa.addTelefone(telefone);
+        }
+        
         return pessoa;
     }
 }

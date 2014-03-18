@@ -1,6 +1,7 @@
 package br.ufpb.tcc.dao.impl;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -31,7 +32,7 @@ public class PessoaDAOPostgres implements PessoaDAO {
             pstm = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstm.setInt(1, entidade.getDocumento().getId());
             pstm.setString(2, entidade.getNome());
-            pstm.setString(3, entidade.getNascimento());
+            pstm.setDate(3, new Date(entidade.getNascimento().getTime()));
             pstm.executeUpdate();
             
             //recuperar o ResultSet
@@ -59,7 +60,7 @@ public class PessoaDAOPostgres implements PessoaDAO {
             pstm = conn.prepareStatement(sql);
             pstm.setInt(1, entidade.getDocumento().getId());
             pstm.setString(2, entidade.getNome());
-            pstm.setString(3, entidade.getNascimento());
+            pstm.setDate(3, new Date(entidade.getNascimento().getTime()));
             
             pstm.setInt(4, entidade.getId());
             pstm.executeUpdate();            
@@ -108,7 +109,7 @@ public class PessoaDAOPostgres implements PessoaDAO {
                 pessoa = new Pessoa();
                 pessoa.setId(rs.getInt("id"));
                 pessoa.setNome(rs.getString("nome"));
-                pessoa.setNascimento(rs.getString("nascimento"));
+                pessoa.setNascimento(rs.getDate("nascimento"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -139,7 +140,7 @@ public class PessoaDAOPostgres implements PessoaDAO {
                 pessoa = new Pessoa();
                 pessoa.setId(rs.getInt("id"));
                 pessoa.setNome(rs.getString("nome"));
-                pessoa.setNascimento(rs.getString("nascimento"));
+                pessoa.setNascimento(rs.getDate("nascimento"));
  
                 pessoas.add(pessoa);
             }

@@ -1,5 +1,7 @@
 package br.ufpb.tcc;
 
+import java.util.Date;
+
 import br.ufpb.tcc.dao.OperadoraDAO;
 import br.ufpb.tcc.dao.PessoaDAO;
 import br.ufpb.tcc.dao.TelefoneDAO;
@@ -38,7 +40,7 @@ public class Insere {
 		
 		Pessoa p1 = new Pessoa();
 		p1.setNome("fred");
-		p1.setNascimento("0087597409");
+		p1.setNascimento(new Date());
 		p1.setDocumento(u1);
 		
 		PessoaDAO pd = DAOFactory.criarPessoaDAO(Bancos.POSTGRES.ordinal());
