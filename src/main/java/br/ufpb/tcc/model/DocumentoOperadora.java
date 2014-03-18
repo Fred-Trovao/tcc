@@ -12,6 +12,9 @@ public class DocumentoOperadora {
 	}
 	
 	public Integer getId() {
+		if(this.id == null){
+			return null;
+		}
 		return Integer.parseInt(id);
 	}
 	public void setId(Integer id) {

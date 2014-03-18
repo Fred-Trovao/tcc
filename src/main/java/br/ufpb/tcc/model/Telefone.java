@@ -13,12 +13,14 @@ public class Telefone {
 	public Telefone(){
 	}
 	
-	public Telefone(Pessoa titular, Operadora operadora){
-		this.titular = titular;
+	public Telefone(Operadora operadora){
 		this.operadora = operadora;
 	}
 	
 	public Integer getId() {
+		if(this.id == null){
+			return null;
+		}
 		return Integer.parseInt(id);
 	}
 	public void setId(Integer id) {

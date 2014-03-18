@@ -8,6 +8,9 @@ public class Documento {
 	private byte tipo;
 		
 	public Integer getId() {
+		if(this.id == null){
+			return null;
+		}
 		return Integer.parseInt(id);
 	}
 	public void setId(Integer id) {

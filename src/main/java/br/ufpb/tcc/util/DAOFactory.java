@@ -1,10 +1,13 @@
 package br.ufpb.tcc.util;
 
+import br.ufpb.tcc.dao.ClienteDAO;
 import br.ufpb.tcc.dao.OperadoraDAO;
 import br.ufpb.tcc.dao.PessoaDAO;
 import br.ufpb.tcc.dao.TelefoneDAO;
 import br.ufpb.tcc.dao.DocumentoDAO;
 import br.ufpb.tcc.dao.DocumentoOperadoraDAO;
+import br.ufpb.tcc.dao.impl.ClienteDAOMongoDB;
+import br.ufpb.tcc.dao.impl.ClienteDAOPostgres;
 import br.ufpb.tcc.dao.impl.OperadoraDAOPostgres;
 import br.ufpb.tcc.dao.impl.PessoaDAOPostgres;
 import br.ufpb.tcc.dao.impl.TelefoneDAOPostgres;
@@ -49,6 +52,16 @@ public class DAOFactory {
 
 		if (banco == Bancos.POSTGRES.ordinal()) {
 			return new DocumentoOperadoraDAOPostgres();
+		}
+		return null;
+	}
+	
+	public static ClienteDAO criarClienteDAO(int banco) {
+
+		if (banco == Bancos.POSTGRES.ordinal()) {
+			return new ClienteDAOPostgres();
+		}else if(banco == Bancos.MONGODB.ordinal()){
+			return new ClienteDAOMongoDB();
 		}
 		return null;
 	}
