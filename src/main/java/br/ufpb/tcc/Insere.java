@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import br.ufpb.tcc.dao.ClienteDAO;
+import br.ufpb.tcc.dao.impl.Aleatorio;
 import br.ufpb.tcc.model.Documento;
 import br.ufpb.tcc.model.Operadora;
 import br.ufpb.tcc.model.Pessoa;
@@ -16,7 +17,7 @@ import br.ufpb.tcc.util.TccException;
 public class Insere {
 
 	public static void main(String[] args) throws TccException {
-		
+				
 		Documento d1 = new Documento();
 		d1.setNumero("00875976409");
 		d1.setTipo((byte) 1);
@@ -51,14 +52,29 @@ public class Insere {
 		cd.save(p1);
 	}
 	
-	public static void createBase(long pessoas, long operadoras){
+	public static void createBase(int qtdPessoas, int qtdTelefones, 
+			int qtdOperadoras, int qtdDocOperadora){
 		
-		List<Integer> idOperadoras = new ArrayList<Integer>();
+		List<Operadora> operadoras = new ArrayList<Operadora>();
 				
-		for(long i=0; i<operadoras;i++){
+		for(int i=0; i<qtdOperadoras;i++){
+			Operadora operadora = new Operadora();
+			operadora.setRazaoSocial(Aleatorio.geraPalavraLetras(6));
 			
+			for(int j=0; j<qtdDocOperadora; j++){
+				Documento documento = new Documento();
+				documento.setNumero(Aleatorio.geraPalavraNumeros(11));
+				documento.setTipo((byte) j);
+				
+				operadora.addDocumento(documento);
+			}
+			
+			operadoras.add(operadora);
 		}
 		
-	}
-	
+		for(int i=0; i<qtdPessoas;i++){
+			Pessoa pessoa = new Pessoa();
+			//pessoa.se
+		}
+	}	
 }

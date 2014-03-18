@@ -7,7 +7,6 @@ import br.ufpb.tcc.util.TccException;
 
 public class ClienteDAOPostgres implements ClienteDAO {
 
-	@Override
 	public void save(Pessoa pessoa) throws TccException {
 		
 		PessoaDAOPostgres pdp = new PessoaDAOPostgres();

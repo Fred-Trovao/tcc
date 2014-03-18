@@ -21,7 +21,7 @@ public class ClienteDAOMongoDB implements ClienteDAO {
                 ConexaoMongo.getInstance()
                     .getDB().getCollection("cliente");
     }
-	@Override
+	
 	public void save(Pessoa pessoa) throws TccException {
 		
 		Map<String, Object> mapPessoa =
