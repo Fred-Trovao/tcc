@@ -17,7 +17,7 @@ CREATE TABLE pessoa
 id SERIAL NOT NULL,
 id_documento INTEGER NOT NULL,
 nome varchar(255) NOT NULL,
-nascimento varchar(11) NOT NULL,
+nascimento date NOT NULL,
 CONSTRAINT pk_pessoa PRIMARY KEY (id),
 CONSTRAINT fk_pessoa_documento FOREIGN KEY (id_documento) REFERENCES documento(id)
 );

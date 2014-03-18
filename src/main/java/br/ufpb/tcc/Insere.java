@@ -1,7 +1,6 @@
 package br.ufpb.tcc;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import br.ufpb.tcc.dao.ClienteDAO;
@@ -17,43 +16,13 @@ import br.ufpb.tcc.util.TccException;
 public class Insere {
 
 	public static void main(String[] args) throws TccException {
-				
-		Documento d1 = new Documento();
-		d1.setNumero("00875976409");
-		d1.setTipo((byte) 1);
 		
-		Documento d2 = new Documento();
-		d2.setNumero("123456789");
-		d2.setTipo((byte) 2);
+		createBase(2, 2, 3, 2, Bancos.MONGODB.ordinal());
 		
-		Documento d3 = new Documento();
-		d3.setNumero("987654321");
-		d3.setTipo((byte) 2);
-						
-		Operadora o1 = new Operadora();
-		o1.setRazaoSocial("oi");
-		o1.addDocumento(d2);
-		o1.addDocumento(d3);
-						
-		Pessoa p1 = new Pessoa();
-		p1.setNome("fred");
-		p1.setNascimento(new Date());
-		p1.setDocumento(d1);
-		
-		Telefone t1 = new Telefone(o1);
-		t1.setNumero("88269825");
-		p1.addTelefone(t1);
-		
-		Telefone t2 = new Telefone(o1);
-		t2.setNumero("32310681");
-		p1.addTelefone(t2);
-		
-		ClienteDAO cd = DAOFactory.criarClienteDAO(Bancos.MONGODB.ordinal());
-		cd.save(p1);
 	}
 	
 	public static void createBase(int qtdPessoas, int qtdTelefones, 
-			int qtdOperadoras, int qtdDocOperadora){
+			int qtdOperadoras, int qtdDocOperadora, int banco) throws TccException{
 		
 		List<Operadora> operadoras = new ArrayList<Operadora>();
 				
@@ -64,7 +33,7 @@ public class Insere {
 			for(int j=0; j<qtdDocOperadora; j++){
 				Documento documento = new Documento();
 				documento.setNumero(Aleatorio.geraPalavraNumeros(11));
-				documento.setTipo((byte) j);
+				documento.setTipo((byte) (j+2));
 				
 				operadora.addDocumento(documento);
 			}
@@ -74,7 +43,25 @@ public class Insere {
 		
 		for(int i=0; i<qtdPessoas;i++){
 			Pessoa pessoa = new Pessoa();
-			//pessoa.se
+			pessoa.setNome(Aleatorio.geraPalavraLetras(8)
+					+" " +Aleatorio.geraPalavraLetras(6));
+			pessoa.setNascimento(Aleatorio.geraData(1930, 2000));
+			
+			Documento documento = new Documento();
+			documento.setNumero(Aleatorio.geraPalavraNumeros(11));
+			documento.setTipo((byte) 1);
+			
+			pessoa.setDocumento(documento);
+			
+			for(int j=0;j<qtdTelefones;j++){
+				Telefone telefone = new Telefone(
+						operadoras.get(Aleatorio.geraInt(0, operadoras.size() - 1)));
+				telefone.setNumero(Aleatorio.geraPalavraNumeros(10));
+				pessoa.addTelefone(telefone);
+			}
+			
+			ClienteDAO cd = DAOFactory.criarClienteDAO(banco);
+			cd.save(pessoa);
 		}
 	}	
 }

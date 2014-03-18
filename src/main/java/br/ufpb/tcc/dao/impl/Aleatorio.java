@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
+import br.ufpb.tcc.model.Telefone;
+
 public class Aleatorio {
 
 	private static final String ALFABETO = "abcdefghijklmnopqrstuvxwyzu";
