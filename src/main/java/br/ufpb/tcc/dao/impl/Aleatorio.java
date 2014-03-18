@@ -10,6 +10,7 @@ public class Aleatorio {
 	private static final String NUMEROS = "0123456789";
 		
 	public static String geraString(int tamanho, String... digitos){
+				
 		Random random = new Random();
 		
 		String digitosString = "";
@@ -47,8 +48,13 @@ public class Aleatorio {
 		return random.nextInt(max);
 	}
 	
-	public static Date geraData(Date min, Date max){
-		return new Date(geraLong(min.getTime(), max.getTime()));
+	public static Date geraData(int anoMin, int anoMax){
+		int d = geraInt(1, 31);
+		int m = geraInt(1,12);
+		int a = geraInt(anoMin, anoMax);
+		
+		Date date = getData(d, m, a);	
+		return date;
 	}
 	
 	public static Date getData(int dia, int mes, int ano){
@@ -63,43 +69,8 @@ public class Aleatorio {
 	public static int geraInt(int min, int max){
 		Random random = new Random();
 		
-		int x = random.nextInt(max + 1);
-		
-		if(x< min){
-			x += min;
-		}
-		
-		return x;
-	}
-	
-	public static long geraLong(long min, long max){
-		Random random = new Random();
-		
-		long x = random.nextLong();
-		
-		if(x<0){
-			x = x*-1;
-		}
+		int x = random.nextInt(max - min + 1) + min;
 				
-		while(x > max){
-			x = x/10;
-		}
-		
-		if(x< min){
-			x += (min-x);
-		}
-		
 		return x;
-	}
-	
-	public static void main(String[] args){
-		
-		Date d = getData(1, 1, 1900);
-		Date d1 = getData(31, 12, 1989);
-		
-		for(int i = 0; i<100; i++){			
-			System.out.println(geraLong(20, 30));
-		}
-		
 	}
 }
