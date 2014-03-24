@@ -17,6 +17,12 @@ import br.ufpb.tcc.util.TccException;
 
 public class OperadoraDAOPostgres implements OperadoraDAO {
 
+	private Connection conn;
+	
+	public OperadoraDAOPostgres(Connection conn){
+		this.conn = conn;
+	}
+	
 	public void save(Operadora entidade) throws TccException {
 		if (entidade == null) {
 			String mensagem = "Não foi informado a operadora a cadastrar.";
@@ -28,10 +34,8 @@ public class OperadoraDAOPostgres implements OperadoraDAO {
 			throw new TccException(mensagem);
 		}
 		
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		try {
-			conn = ConexaoPostgres.getConexao();
 			String sql = "INSERT INTO operadora (razaosocial) VALUES (?)";
 
 			pstm = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -48,28 +52,26 @@ public class OperadoraDAOPostgres implements OperadoraDAO {
 			for(Documento doc : entidade.getDocumentos()){
 				
 				if(doc.getId() == null){
-					DocumentoDAOPostgres ddp = new DocumentoDAOPostgres();				
+					DocumentoDAOPostgres ddp = new DocumentoDAOPostgres(conn);				
 					ddp.save(doc);
 				}
 				
-				DocumentoOperadoraDAOPostgres dodp = new DocumentoOperadoraDAOPostgres();
+				DocumentoOperadoraDAOPostgres dodp = new DocumentoOperadoraDAOPostgres(conn);
 				DocumentoOperadora docOp = new DocumentoOperadora(doc, entidade);
 				
 				dodp.save(docOp);
 			}
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new TccException(e);
 		} finally {
-			ConexaoPostgres.closeConexao(conn, pstm);
+			ConexaoPostgres.closeConexao(pstm);
 		}
 	}
 
 	public void update(Operadora entidade) throws TccException {
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		try {
-			conn = ConexaoPostgres.getConexao();
 			String sql = "UPDATE operadora SET razaosocial = ? WHERE id = ?";
         
             pstm = conn.prepareStatement(sql);
@@ -78,17 +80,15 @@ public class OperadoraDAOPostgres implements OperadoraDAO {
             
             pstm.executeUpdate();            
         } catch (SQLException e) {
-            e.printStackTrace();
+        	throw new TccException(e);
         } finally {
-            ConexaoPostgres.closeConexao(conn, pstm);
+            ConexaoPostgres.closeConexao(pstm);
         }
 	}
 
 	public void delete(Operadora entidade) throws TccException {
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		try {
-			conn = ConexaoPostgres.getConexao();
 			String sql = "DELETE FROM operadora WHERE id = ?";
         
             pstm = conn.prepareStatement(sql);
@@ -96,23 +96,20 @@ public class OperadoraDAOPostgres implements OperadoraDAO {
             
             pstm.executeUpdate();            
         } catch (SQLException e) {
-            e.printStackTrace();
+        	throw new TccException(e);
         } finally {
-            ConexaoPostgres.closeConexao(conn, pstm);
+            ConexaoPostgres.closeConexao(pstm);
         }
 
 	}
 
 	public Operadora findOne(Operadora entidade) throws TccException {
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 		
 		Operadora operadora = null;
 		
 		try {
-			conn = ConexaoPostgres.getConexao();
-        
 			String sql = "SELECT * FROM operadora WHERE id = ?";
 			            
 			pstm = conn.prepareStatement(sql);
@@ -125,23 +122,20 @@ public class OperadoraDAOPostgres implements OperadoraDAO {
                 operadora.setRazaoSocial(rs.getString("razaosocial"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+        	throw new TccException(e);
         } finally {
-        	ConexaoPostgres.closeConexao(conn, pstm, rs);
+        	ConexaoPostgres.closeConexao(pstm, rs);
         }
 		
 		return operadora;
 	}
 
 	public List<Operadora> findAll() throws TccException {
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 		List<Operadora> operadoras = new ArrayList<Operadora>();
 		
 		try {
-			conn = ConexaoPostgres.getConexao();
-        
 			String sql = "SELECT * FROM operadora";
 			Operadora operadora = null;
             
@@ -156,27 +150,25 @@ public class OperadoraDAOPostgres implements OperadoraDAO {
                 operadoras.add(operadora);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+        	throw new TccException(e);
         } finally {
-        	ConexaoPostgres.closeConexao(conn, pstm, rs);
+        	ConexaoPostgres.closeConexao(pstm, rs);
         }
         return operadoras;
 	}
 
 	public void deleteAll() throws TccException {
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		try {
-			conn = ConexaoPostgres.getConexao();
 			String sql = "DELETE FROM operadora";
         
             pstm = conn.prepareStatement(sql);
             
             pstm.executeUpdate();            
         } catch (SQLException e) {
-            e.printStackTrace();
+        	throw new TccException(e);
         } finally {
-            ConexaoPostgres.closeConexao(conn, pstm);
+            ConexaoPostgres.closeConexao(pstm);
         }		
 	}
 }

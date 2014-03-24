@@ -41,6 +41,16 @@ public class ConexaoPostgres{
 			throws TccException {
 		closeConexao(con, stmt, null);
 	}
+	
+	public static void closeConexao(PreparedStatement stmt)
+			throws TccException {
+		closeConexao(null, stmt, null);
+	}
+	
+	public static void closeConexao(PreparedStatement stmt, ResultSet rs)
+			throws TccException {
+		closeConexao(null, stmt, rs);
+	}
 
 	public static void closeConexao(Connection con, PreparedStatement stmt,
 			ResultSet rs) throws TccException {

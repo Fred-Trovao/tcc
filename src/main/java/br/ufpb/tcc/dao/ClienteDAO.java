@@ -5,6 +5,6 @@ import br.ufpb.tcc.util.TccException;
 
 public interface ClienteDAO {
 	
-	public void save(Pessoa pessoa) throws TccException ;
+	public void save(Pessoa pessoa) throws TccException;
 	
 }

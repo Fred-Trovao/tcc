@@ -16,7 +16,13 @@ import br.ufpb.tcc.util.ConexaoPostgres;
 import br.ufpb.tcc.util.TccException;
 
 public class PessoaDAOPostgres implements PessoaDAO {
-
+	
+	private Connection conn;
+	
+	public PessoaDAOPostgres(Connection conn){
+		this.conn = conn;
+	}
+		
 	public void save(Pessoa entidade) throws TccException {
 		
 		if (entidade == null) {
@@ -30,17 +36,15 @@ public class PessoaDAOPostgres implements PessoaDAO {
 		}
 		
 		if(entidade.getDocumento().getId() == null){
-			DocumentoDAOPostgres ddp = new DocumentoDAOPostgres();
+			DocumentoDAOPostgres ddp = new DocumentoDAOPostgres(conn);
 			
 			Documento doc = entidade.getDocumento();
 			
 			ddp.save(doc);
 		}
 		
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		try {
-			conn = ConexaoPostgres.getConexao();
 			String sql = "INSERT INTO pessoa (id_documento, nome, nascimento) VALUES (?, ?, ?)";
         
             pstm = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -57,17 +61,15 @@ public class PessoaDAOPostgres implements PessoaDAO {
     		entidade.setId(id);
     		
         } catch (SQLException e) {
-            e.printStackTrace();
+        	throw new TccException(e);
         } finally {
-            ConexaoPostgres.closeConexao(conn, pstm);
+            ConexaoPostgres.closeConexao(pstm);
         }
 	}
 
 	public void update(Pessoa entidade) throws TccException {
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		try {
-			conn = ConexaoPostgres.getConexao();
 			String sql = "UPDATE pessoa SET id_documento = ?,"
 					+ " nome = ?, nascimento = ? WHERE id = ?";
         
@@ -79,17 +81,15 @@ public class PessoaDAOPostgres implements PessoaDAO {
             pstm.setInt(4, entidade.getId());
             pstm.executeUpdate();            
         } catch (SQLException e) {
-            e.printStackTrace();
+        	throw new TccException(e);
         } finally {
-            ConexaoPostgres.closeConexao(conn, pstm);
+            ConexaoPostgres.closeConexao(pstm);
         }
 	}
 
 	public void delete(Pessoa entidade) throws TccException {
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		try {
-			conn = ConexaoPostgres.getConexao();
 			String sql = "DELETE FROM pessoa WHERE id = ?";
         
             pstm = conn.prepareStatement(sql);
@@ -97,21 +97,19 @@ public class PessoaDAOPostgres implements PessoaDAO {
             
             pstm.executeUpdate();            
         } catch (SQLException e) {
-            e.printStackTrace();
+        	throw new TccException(e);
         } finally {
-            ConexaoPostgres.closeConexao(conn, pstm);
+            ConexaoPostgres.closeConexao(pstm);
         }
 	}
 
 	public Pessoa findOne(Pessoa entidade) throws TccException {
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 		
 		Pessoa pessoa = null;
 		
 		try {
-			conn = ConexaoPostgres.getConexao();
         
 			String sql = "SELECT * FROM pessoa WHERE id = ?";
 			            
@@ -126,9 +124,9 @@ public class PessoaDAOPostgres implements PessoaDAO {
                 pessoa.setNascimento(rs.getDate("nascimento"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new TccException(e);
         } finally {
-        	ConexaoPostgres.closeConexao(conn, pstm, rs);
+        	ConexaoPostgres.closeConexao(pstm, rs);
         }
 		
 		return pessoa;
@@ -136,13 +134,11 @@ public class PessoaDAOPostgres implements PessoaDAO {
 
 	public List<Pessoa> findAll() throws TccException {
 		
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 		List<Pessoa> pessoas = new ArrayList<Pessoa>();
 		
 		try {
-			conn = ConexaoPostgres.getConexao();
         
 			String sql = "SELECT * FROM pessoa";
 			Pessoa pessoa = null;
@@ -159,27 +155,25 @@ public class PessoaDAOPostgres implements PessoaDAO {
                 pessoas.add(pessoa);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+        	throw new TccException(e);
         } finally {
-        	ConexaoPostgres.closeConexao(conn, pstm, rs);
+        	ConexaoPostgres.closeConexao(pstm, rs);
         }
         return pessoas;
 	}
 
 	public void deleteAll() throws TccException {
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		try {
-			conn = ConexaoPostgres.getConexao();
 			String sql = "DELETE FROM pessoa";
         
             pstm = conn.prepareStatement(sql);
             
             pstm.executeUpdate();            
         } catch (SQLException e) {
-            e.printStackTrace();
+        	throw new TccException(e);
         } finally {
-            ConexaoPostgres.closeConexao(conn, pstm);
+            ConexaoPostgres.closeConexao(pstm);
         }		
 	}
 

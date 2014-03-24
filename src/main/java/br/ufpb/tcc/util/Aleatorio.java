@@ -1,4 +1,4 @@
-package br.ufpb.tcc.dao.impl;
+package br.ufpb.tcc.util;
 
 import java.util.Calendar;
 import java.util.Date;

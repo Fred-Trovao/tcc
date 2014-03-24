@@ -13,17 +13,19 @@ import br.ufpb.tcc.util.ConexaoPostgres;
 import br.ufpb.tcc.util.TccException;
 
 public class DocumentoOperadoraDAOPostgres implements DocumentoOperadoraDAO {
-
+	private Connection conn;
+	
+	public DocumentoOperadoraDAOPostgres(Connection conn){
+		this.conn = conn;
+	}
 	public void save(DocumentoOperadora entidade) throws TccException {
 		if (entidade == null) {
 			String mensagem = "Não foi informado o documentoOperadora a cadastrar.";
 			throw new TccException(mensagem);
 		}
 
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		try {
-			conn = ConexaoPostgres.getConexao();
 			String sql = "INSERT INTO documento_operadora (id_documento, id_operadora) VALUES (?, ?)";
 
 			pstm = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -39,18 +41,16 @@ public class DocumentoOperadoraDAOPostgres implements DocumentoOperadoraDAO {
 			entidade.setId(id);
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new TccException(e);
 		} finally {
-			ConexaoPostgres.closeConexao(conn, pstm);
+			ConexaoPostgres.closeConexao(pstm);
 		}
 
 	}
 
 	public void update(DocumentoOperadora entidade) throws TccException {
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		try {
-			conn = ConexaoPostgres.getConexao();
 			String sql = "UPDATE documento_operadora SET id_documento = ?,"
 					+ " id_operadora = ? WHERE id = ?";
         
@@ -61,17 +61,15 @@ public class DocumentoOperadoraDAOPostgres implements DocumentoOperadoraDAO {
             pstm.setInt(3, entidade.getId());
             pstm.executeUpdate();            
         } catch (SQLException e) {
-            e.printStackTrace();
+        	throw new TccException(e);
         } finally {
-            ConexaoPostgres.closeConexao(conn, pstm);
+            ConexaoPostgres.closeConexao(pstm);
         }
 	}
 
 	public void delete(DocumentoOperadora entidade) throws TccException {
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		try {
-			conn = ConexaoPostgres.getConexao();
 			String sql = "DELETE FROM documento_operadora WHERE id = ?";
         
             pstm = conn.prepareStatement(sql);
@@ -79,9 +77,9 @@ public class DocumentoOperadoraDAOPostgres implements DocumentoOperadoraDAO {
             
             pstm.executeUpdate();            
         } catch (SQLException e) {
-            e.printStackTrace();
+        	throw new TccException(e);
         } finally {
-            ConexaoPostgres.closeConexao(conn, pstm);
+            ConexaoPostgres.closeConexao(pstm);
         }
 	}
 
@@ -96,19 +94,17 @@ public class DocumentoOperadoraDAOPostgres implements DocumentoOperadoraDAO {
 	}
 
 	public void deleteAll() throws TccException {
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		try {
-			conn = ConexaoPostgres.getConexao();
 			String sql = "DELETE FROM documento_operadora";
         
             pstm = conn.prepareStatement(sql);
             
             pstm.executeUpdate();            
         } catch (SQLException e) {
-            e.printStackTrace();
+        	throw new TccException(e);
         } finally {
-            ConexaoPostgres.closeConexao(conn, pstm);
+            ConexaoPostgres.closeConexao(pstm);
         }		
 	}
 

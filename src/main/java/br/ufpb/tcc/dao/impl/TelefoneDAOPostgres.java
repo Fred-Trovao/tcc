@@ -15,6 +15,12 @@ import br.ufpb.tcc.util.TccException;
 
 public class TelefoneDAOPostgres implements TelefoneDAO {
 
+	private Connection conn;
+	
+	public TelefoneDAOPostgres(Connection conn){
+		this.conn = conn;
+	}
+	
 	public void save(Telefone entidade) throws TccException {
 		if (entidade == null) {
 			String mensagem = "Não foi informado o telefone a cadastrar.";
@@ -31,10 +37,8 @@ public class TelefoneDAOPostgres implements TelefoneDAO {
 			throw new TccException(mensagem);
 		}
 		
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		try {
-			conn = ConexaoPostgres.getConexao();
 			String sql = "INSERT INTO telefone (id_pessoa, id_operadora, numero) VALUES (?, ?, ?)";
 
 			pstm = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -51,17 +55,15 @@ public class TelefoneDAOPostgres implements TelefoneDAO {
 			entidade.setId(id);
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new TccException(e);
 		} finally {
-			ConexaoPostgres.closeConexao(conn, pstm);
+			ConexaoPostgres.closeConexao(pstm);
 		}
 	}
 
 	public void update(Telefone entidade) throws TccException {
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		try {
-			conn = ConexaoPostgres.getConexao();
 			String sql = "UPDATE telefone SET id_pessoa = ?,"
 					+ " id_operadora = ?, numero = ? WHERE id = ?";
         
@@ -73,17 +75,15 @@ public class TelefoneDAOPostgres implements TelefoneDAO {
             pstm.setInt(4, entidade.getId());
             pstm.executeUpdate();            
         } catch (SQLException e) {
-            e.printStackTrace();
+        	throw new TccException(e);
         } finally {
-            ConexaoPostgres.closeConexao(conn, pstm);
+            ConexaoPostgres.closeConexao(pstm);
         }
 	}
 
 	public void delete(Telefone entidade) throws TccException {
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		try {
-			conn = ConexaoPostgres.getConexao();
 			String sql = "DELETE FROM telefone WHERE id = ?";
         
             pstm = conn.prepareStatement(sql);
@@ -91,21 +91,19 @@ public class TelefoneDAOPostgres implements TelefoneDAO {
             
             pstm.executeUpdate();            
         } catch (SQLException e) {
-            e.printStackTrace();
+        	throw new TccException(e);
         } finally {
-            ConexaoPostgres.closeConexao(conn, pstm);
+            ConexaoPostgres.closeConexao(pstm);
         }
 	}
 
 	public Telefone findOne(Telefone entidade) throws TccException {
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 		
 		Telefone telefone = null;
 		
 		try {
-			conn = ConexaoPostgres.getConexao();
         
 			String sql = "SELECT * FROM telefone WHERE id = ?";
 			            
@@ -119,23 +117,20 @@ public class TelefoneDAOPostgres implements TelefoneDAO {
                 telefone.setNumero(rs.getString("numero"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+        	throw new TccException(e);
         } finally {
-        	ConexaoPostgres.closeConexao(conn, pstm, rs);
+        	ConexaoPostgres.closeConexao(pstm, rs);
         }
 		
 		return telefone;
 	}
 
 	public List<Telefone> findAll() throws TccException {
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 		List<Telefone> telefones = new ArrayList<Telefone>();
 		
 		try {
-			conn = ConexaoPostgres.getConexao();
-        
 			String sql = "SELECT * FROM telefone";
 			Telefone telefone = null;
             
@@ -150,27 +145,25 @@ public class TelefoneDAOPostgres implements TelefoneDAO {
                 telefones.add(telefone);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+        	throw new TccException(e);
         } finally {
-        	ConexaoPostgres.closeConexao(conn, pstm, rs);
+        	ConexaoPostgres.closeConexao(pstm, rs);
         }
         return telefones;
 	}
 
 	public void deleteAll() throws TccException {
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		try {
-			conn = ConexaoPostgres.getConexao();
 			String sql = "DELETE FROM telefone";
         
             pstm = conn.prepareStatement(sql);
             
             pstm.executeUpdate();            
         } catch (SQLException e) {
-            e.printStackTrace();
+        	throw new TccException(e);
         } finally {
-            ConexaoPostgres.closeConexao(conn, pstm);
+            ConexaoPostgres.closeConexao(pstm);
         }
 	}
 

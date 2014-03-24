@@ -1,14 +1,15 @@
 package br.ufpb.tcc;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.ufpb.tcc.dao.ClienteDAO;
-import br.ufpb.tcc.dao.impl.Aleatorio;
 import br.ufpb.tcc.model.Documento;
 import br.ufpb.tcc.model.Operadora;
 import br.ufpb.tcc.model.Pessoa;
 import br.ufpb.tcc.model.Telefone;
+import br.ufpb.tcc.util.Aleatorio;
 import br.ufpb.tcc.util.Bancos;
 import br.ufpb.tcc.util.DAOFactory;
 import br.ufpb.tcc.util.TccException;
@@ -17,12 +18,17 @@ public class Insere {
 
 	public static void main(String[] args) throws TccException {
 		
-		createBase(2, 2, 3, 2, Bancos.MONGODB.ordinal());
+		long inicio = System.currentTimeMillis();
+		createBase(1, 2, 1, 2, Bancos.POSTGRES.ordinal());
+		
+		long fim = System.currentTimeMillis();
+		
+		System.out.println(fim -inicio);
 		
 	}
 	
 	public static void createBase(int qtdPessoas, int qtdTelefones, 
-			int qtdOperadoras, int qtdDocOperadora, int banco) throws TccException{
+			int qtdOperadoras, int qtdDocOperadora, int banco){
 		
 		List<Operadora> operadoras = new ArrayList<Operadora>();
 				
@@ -32,7 +38,7 @@ public class Insere {
 			
 			for(int j=0; j<qtdDocOperadora; j++){
 				Documento documento = new Documento();
-				documento.setNumero(Aleatorio.geraPalavraNumeros(11));
+				//documento.setNumero(Aleatorio.geraPalavraNumeros(11));
 				documento.setTipo((byte) (j+2));
 				
 				operadora.addDocumento(documento);
@@ -60,8 +66,16 @@ public class Insere {
 				pessoa.addTelefone(telefone);
 			}
 			
-			ClienteDAO cd = DAOFactory.criarClienteDAO(banco);
-			cd.save(pessoa);
+			ClienteDAO cd;
+			try {
+				cd = DAOFactory.criarClienteDAO(banco);
+				
+				cd.save(pessoa);
+				System.out.println("Sucesso!");
+			} catch (TccException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}	
 }

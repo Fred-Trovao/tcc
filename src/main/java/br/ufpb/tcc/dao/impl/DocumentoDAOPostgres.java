@@ -15,16 +15,20 @@ import br.ufpb.tcc.util.TccException;
 
 public class DocumentoDAOPostgres implements DocumentoDAO {
 
+	private Connection conn;
+
+	public DocumentoDAOPostgres(Connection conn) {
+		this.conn = conn;
+	}
+
 	public void save(Documento entidade) throws TccException {
 		if (entidade == null) {
 			String mensagem = "Não foi informado o documento a cadastrar.";
 			throw new TccException(mensagem);
 		}
 
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		try {
-			conn = ConexaoPostgres.getConexao();
 			String sql = "INSERT INTO documento (numero, tipo) VALUES (?, ?)";
 
 			pstm = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -40,128 +44,118 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
 			entidade.setId(id);
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new TccException(e);
 		} finally {
-			ConexaoPostgres.closeConexao(conn, pstm);
+			ConexaoPostgres.closeConexao(pstm);
 		}
 	}
 
 	public void update(Documento entidade) throws TccException {
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		try {
-			conn = ConexaoPostgres.getConexao();
 			String sql = "UPDATE documento SET numero = ?,"
 					+ " tipo = ? WHERE id = ?";
-        
-            pstm = conn.prepareStatement(sql);
-            pstm.setString(1, entidade.getNumero());
-            pstm.setInt(2, entidade.getTipo());
-            
-            pstm.setInt(3, entidade.getId());
-            pstm.executeUpdate();            
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            ConexaoPostgres.closeConexao(conn, pstm);
-        }
+
+			pstm = conn.prepareStatement(sql);
+			pstm.setString(1, entidade.getNumero());
+			pstm.setInt(2, entidade.getTipo());
+
+			pstm.setInt(3, entidade.getId());
+			pstm.executeUpdate();
+		} catch (SQLException e) {
+			throw new TccException(e);
+		} finally {
+			ConexaoPostgres.closeConexao(pstm);
+		}
 	}
 
 	public void delete(Documento entidade) throws TccException {
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		try {
-			conn = ConexaoPostgres.getConexao();
 			String sql = "DELETE FROM documento WHERE id = ?";
-        
-            pstm = conn.prepareStatement(sql);
-            pstm.setInt(1, entidade.getId());
-            
-            pstm.executeUpdate();            
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            ConexaoPostgres.closeConexao(conn, pstm);
-        }
+
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, entidade.getId());
+
+			pstm.executeUpdate();
+		} catch (SQLException e) {
+			throw new TccException(e);
+		} finally {
+			ConexaoPostgres.closeConexao(pstm);
+		}
 	}
 
 	public Documento findOne(Documento entidade) throws TccException {
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
-		
+
 		Documento documento = null;
-		
+
 		try {
-			conn = ConexaoPostgres.getConexao();
-        
+
 			String sql = "SELECT * FROM documento WHERE id = ?";
-			            
+
 			pstm = conn.prepareStatement(sql);
 			pstm.setInt(1, entidade.getId());
-            
+
 			rs = pstm.executeQuery();
-            if(rs.next()) {
-                documento = new Documento();
-                documento.setId(rs.getInt("id"));
-                documento.setNumero(rs.getString("numero"));
-                documento.setTipo((byte) rs.getInt("tipo"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-        	ConexaoPostgres.closeConexao(conn, pstm, rs);
-        }
-		
+			if (rs.next()) {
+				documento = new Documento();
+				documento.setId(rs.getInt("id"));
+				documento.setNumero(rs.getString("numero"));
+				documento.setTipo((byte) rs.getInt("tipo"));
+			}
+		} catch (SQLException e) {
+			throw new TccException(e);
+		} finally {
+			ConexaoPostgres.closeConexao(pstm, rs);
+		}
+
 		return documento;
 	}
 
 	public List<Documento> findAll() throws TccException {
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 		List<Documento> documentos = new ArrayList<Documento>();
-		
+
 		try {
-			conn = ConexaoPostgres.getConexao();
-        
+
 			String sql = "SELECT * FROM documento";
 			Documento documento = null;
-            
+
 			pstm = conn.prepareStatement(sql);
-            
+
 			rs = pstm.executeQuery();
-            while (rs.next()) {
-                documento = new Documento();
-                documento.setId(rs.getInt("id"));
-                documento.setNumero(rs.getString("numero"));
-                documento.setTipo((byte) rs.getInt("tipo"));
- 
-                documentos.add(documento);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-        	ConexaoPostgres.closeConexao(conn, pstm, rs);
-        }
-        return documentos;
+			while (rs.next()) {
+				documento = new Documento();
+				documento.setId(rs.getInt("id"));
+				documento.setNumero(rs.getString("numero"));
+				documento.setTipo((byte) rs.getInt("tipo"));
+
+				documentos.add(documento);
+			}
+		} catch (SQLException e) {
+			throw new TccException(e);
+		} finally {
+			ConexaoPostgres.closeConexao(pstm, rs);
+		}
+		return documentos;
 	}
 
 	public void deleteAll() throws TccException {
-		Connection conn = null;
 		PreparedStatement pstm = null;
 		try {
-			conn = ConexaoPostgres.getConexao();
 			String sql = "DELETE FROM documento";
-        
-            pstm = conn.prepareStatement(sql);
-            
-            pstm.executeUpdate();            
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            ConexaoPostgres.closeConexao(conn, pstm);
-        }		
+
+			pstm = conn.prepareStatement(sql);
+
+			pstm.executeUpdate();
+		} catch (SQLException e) {
+			throw new TccException(e);
+		} finally {
+			ConexaoPostgres.closeConexao(pstm);
+		}
 	}
 
 }
