@@ -1,30 +1,34 @@
 package br.ufpb.tcc.util;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Host;
+import com.datastax.driver.core.Metadata;
 
 public class ConexaoCassandra {
-	private static final String DRIVER = "org.apache.cassandra.cql.jdbc.CassandraDriver";
-	private static final String URL = "jdbc:cassandra://localhost:9170/tcc";
+	
+	private static final String URL = "127.0.0.1";
+	private Cluster cluster;
 
-	public static Connection getConexao() throws TccException {
-		try {
-			
-			Class.forName(DRIVER);
-			
-			return DriverManager.getConnection(URL);
-		} catch (SQLException exc) {
-			StringBuffer mensagem = new StringBuffer(
-					"Não foi possível estabelecer conexão "
-							+ "com o banco de dados.");
-			mensagem.append("\nMotivo: " + exc.getMessage());
-			throw new TccException(mensagem.toString());
-		} catch (ClassNotFoundException exc) {
-			StringBuffer mensagem = new StringBuffer("Não foi possível conectar"
-					+ " com banco de dados.");
-			mensagem.append("\nMotivo: " + exc.getMessage());
-			throw new TccException(mensagem.toString());
-		}
-	}
+	   public void connect(String node) {
+	      cluster = Cluster.builder()
+	            .addContactPoint(node)
+	            .build();
+	      Metadata metadata = cluster.getMetadata();
+	      System.out.printf("Connected to cluster: %s\n", 
+	            metadata.getClusterName());
+	      for ( Host host : metadata.getAllHosts() ) {
+	         System.out.printf("Datatacenter: %s; Host: %s; Rack: %s\n",
+	               host.getDatacenter(), host.getAddress(), host.getRack());
+	      }
+	   }
+
+	   public void close() {
+	      cluster.close();
+	   }
+
+	   public static void main(String[] args) {
+	      ConexaoCassandra client = new ConexaoCassandra();
+	      client.connect("127.0.0.1");
+	      client.close();
+	   }
 }
