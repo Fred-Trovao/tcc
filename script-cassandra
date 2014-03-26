@@ -1,0 +1,9 @@
+CREATE KEYSPACE tcc WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 1};
+
+USE tcc ;
+
+CREATE TABLE pessoa (
+  pessoa_id uuid PRIMARY KEY,
+  nome text,
+  lname text
+);

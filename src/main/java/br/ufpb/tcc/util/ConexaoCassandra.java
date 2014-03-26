@@ -1,32 +1,42 @@
 package br.ufpb.tcc.util;
 
 import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Host;
-import com.datastax.driver.core.Metadata;
+import com.datastax.driver.core.Session;
 
 public class ConexaoCassandra {
-
+	private Session session;
+	private static ConexaoCassandra conexaoCassandra;
 	private static final String URL = "127.0.0.1";
 	private Cluster cluster;
-
-	public void connect(String node) {
-		cluster = Cluster.builder().addContactPoint(node).build();
-		Metadata metadata = cluster.getMetadata();
-		System.out.printf("Connected to cluster: %s\n",
-				metadata.getClusterName());
-		for (Host host : metadata.getAllHosts()) {
-			System.out.printf("Datatacenter: %s; Host: %s; Rack: %s\n",
-					host.getDatacenter(), host.getAddress(), host.getRack());
+	
+	private ConexaoCassandra(){
+		
+	}
+	
+	public static synchronized ConexaoCassandra getInstance(){
+		if (conexaoCassandra == null){
+			conexaoCassandra = new ConexaoCassandra();
 		}
+		return conexaoCassandra;
+	}
+	
+	private Cluster getCluster(){
+		if(this.cluster == null){
+			this.cluster = Cluster.builder().addContactPoint(URL)
+			.build();
+		}
+		return this.cluster;
+	}
+	
+	public Session getSession() {
+		if(this.session == null){
+			this.session = getCluster().connect();
+		}
+		return this.session;
 	}
 
 	public void close() {
-		cluster.close();
-	}
-
-	public static void main(String[] args) {
-		ConexaoCassandra client = new ConexaoCassandra();
-		client.connect("127.0.0.1");
-		client.close();
+		session.close();
+		session.getCluster().close();
 	}
 }
