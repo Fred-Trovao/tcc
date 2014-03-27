@@ -2,8 +2,9 @@ CREATE KEYSPACE tcc WITH replication = {'class': 'SimpleStrategy', 'replication_
 
 USE tcc ;
 
-CREATE TABLE pessoa (
-  pessoa_id uuid PRIMARY KEY,
-  nome text,
-  lname text
-);
+CREATE TABLE documento_telefone (documento text, tipo_documento int, telefone text, nome text, nascimento timestamp, operadora_id uuid , PRIMARY KEY (documento, telefone ));
+
+CREATE TABLE operadora (operadora_id uuid PRIMARY KEY, razaoSocial text, documentos map <int, text >);
+
+
+
