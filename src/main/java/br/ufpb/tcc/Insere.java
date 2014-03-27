@@ -1,6 +1,5 @@
 package br.ufpb.tcc;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class Insere {
 	public static void main(String[] args) throws TccException {
 		
 		long inicio = System.currentTimeMillis();
-		createBase(1, 2, 1, 2, Bancos.POSTGRES.ordinal());
+		createBase(1, 2, 1, 2, Bancos.CASSANDRA.ordinal());
 		
 		long fim = System.currentTimeMillis();
 		
@@ -38,7 +37,7 @@ public class Insere {
 			
 			for(int j=0; j<qtdDocOperadora; j++){
 				Documento documento = new Documento();
-				//documento.setNumero(Aleatorio.geraPalavraNumeros(11));
+				documento.setNumero(Aleatorio.geraPalavraNumeros(11));
 				documento.setTipo((byte) (j+2));
 				
 				operadora.addDocumento(documento);

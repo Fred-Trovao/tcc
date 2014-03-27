@@ -1,8 +1,11 @@
 package br.ufpb.tcc.model;
 
+import java.util.UUID;
+
 public class Documento {
 
 	private String id;
+	private UUID uuid;
 	
 	private String numero;
 	private byte tipo;
@@ -36,5 +39,11 @@ public class Documento {
 	}
 	public void setTipo(byte tipo) {
 		this.tipo = tipo;
+	}
+	public UUID getUuid() {
+		return uuid;
+	}
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
 	}
 }

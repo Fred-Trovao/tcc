@@ -2,10 +2,12 @@ package br.ufpb.tcc.model;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 public class Operadora {
 
 	private String id;
+	private UUID uuid;
 	
 	private String razaoSocial;
 	
@@ -61,5 +63,13 @@ public class Operadora {
 	
 	public void removeDocumento(Documento documento){
 		this.documentos.remove(documento);
+	}
+
+	public UUID getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
 	}
 }

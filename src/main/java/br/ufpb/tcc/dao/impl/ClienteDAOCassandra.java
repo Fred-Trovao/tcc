@@ -1,8 +1,11 @@
 package br.ufpb.tcc.dao.impl;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import br.ufpb.tcc.dao.ClienteDAO;
+import br.ufpb.tcc.model.Documento;
 import br.ufpb.tcc.model.Pessoa;
 import br.ufpb.tcc.model.Telefone;
 import br.ufpb.tcc.util.Aleatorio;
@@ -33,24 +36,39 @@ public class ClienteDAOCassandra implements ClienteDAO {
 		}
 		
 		for(Telefone telefone : pessoa.getTelefones()){
+			
+			if(telefone.getOperadora().getUuid() == null){
+			
+				PreparedStatement pstm = this.session.prepare(INSERT_OPERADORA);
+				
+				BoundStatement bstm = new BoundStatement(pstm);
+				
+				Map<Integer, String> documentos = new HashMap<Integer, String>();
+				
+				for(Documento doc : telefone.getOperadora().getDocumentos()){
+					documentos.put((int) doc.getTipo(), doc.getNumero());
+				}
+				
+				telefone.getOperadora().setUuid(Aleatorio.geraUuid()); 
+				
+				this.session.execute(bstm.bind(telefone.getOperadora().getUuid(), 
+						telefone.getOperadora().getRazaoSocial(),
+						documentos));
+			}
+			
 			PreparedStatement pstm = this.session.prepare(INSERT_DOC_TEL);
 			
 			BoundStatement bstm = new BoundStatement(pstm);
 			
-			UUID id_cliente = Aleatorio.geraUuid();
-			UUID id_operadora = Aleatorio.geraUuid();
+			pessoa.getDocumento().setUuid(Aleatorio.geraUuid());
 			
-			this.session.execute(bstm.bind(id_cliente, 
+			this.session.execute(bstm.bind(pessoa.getDocumento().getUuid(), 
 					pessoa.getDocumento().getNumero(), 
-					pessoa.getDocumento().getTipo(),
+					(int) pessoa.getDocumento().getTipo(),
 					telefone.getNumero(),
-					id_operadora,
+					telefone.getOperadora().getUuid(),
 					pessoa.getNome(),
 					pessoa.getNascimento()));
-			
-			for()
 		}
-		
-	}
-	
+	}	
 }

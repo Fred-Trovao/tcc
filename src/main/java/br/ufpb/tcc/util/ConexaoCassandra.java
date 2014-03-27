@@ -7,6 +7,7 @@ public class ConexaoCassandra {
 	private Session session;
 	private static ConexaoCassandra conexaoCassandra;
 	private static final String URL = "127.0.0.1";
+	private final String KEYSPACE = "tcc";
 	private Cluster cluster;
 	
 	private ConexaoCassandra(){
@@ -31,6 +32,7 @@ public class ConexaoCassandra {
 	public Session getSession() {
 		if(this.session == null){
 			this.session = getCluster().connect();
+			this.session.execute("USE " + KEYSPACE);
 		}
 		return this.session;
 	}

@@ -1,6 +1,7 @@
 package br.ufpb.tcc.util;
 
 import br.ufpb.tcc.dao.ClienteDAO;
+import br.ufpb.tcc.dao.impl.ClienteDAOCassandra;
 import br.ufpb.tcc.dao.impl.ClienteDAOMongoDB;
 import br.ufpb.tcc.dao.impl.ClienteDAOPostgres;
 
@@ -12,6 +13,8 @@ public class DAOFactory {
 			return new ClienteDAOPostgres(ConexaoPostgres.getConexao());
 		}else if(banco == Bancos.MONGODB.ordinal()){
 			return new ClienteDAOMongoDB();
+		}else if(banco == Bancos.CASSANDRA.ordinal()){
+			return new ClienteDAOCassandra();
 		}
 		return null;
 	}
