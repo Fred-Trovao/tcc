@@ -2,6 +2,7 @@ package br.ufpb.tcc.conversores;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import br.ufpb.tcc.model.Documento;
 
@@ -13,12 +14,40 @@ public class DocumentoConverter {
  
         return mapDocumento;
     }
- 
+	 
     public Documento converterToDocumento(HashMap<String, Object> hashMap) {
         Documento documento = new Documento();
         documento.setNumero((String) hashMap.get("numero"));
         documento.setTipo((Byte) hashMap.get("tipo"));
  
         return documento;
+    }
+    
+    public Map<Integer, String> converterSetToMapCassandra(Set<Documento> documentos) {
+        
+    	Map<Integer, String> mapDocumento = new HashMap<Integer, String>();
+        
+    	for(Documento doc : documentos){
+    		mapDocumento.put((int)doc.getTipo(), doc.getNumero());
+    	}
+         
+        return mapDocumento;
+    }
+    
+    public Set<Documento> converterToSetDocumentoCassandra(HashMap<Integer, String> hashMap){
+    	//hashMap.g 
+    	return null;
+    }
+    
+    public static void main(String[] args){
+    	Map<Integer, Integer> mapDocumento = new HashMap<Integer, Integer>();
+    	
+    	mapDocumento.put(1, 13);
+    	mapDocumento.put(6, 15);
+    	
+    	for(Integer x : mapDocumento.keySet()){
+    		System.out.println(x);
+    	}
+    	
     }
 }

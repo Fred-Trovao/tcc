@@ -7,4 +7,6 @@ public interface ClienteDAO {
 	
 	public void save(Pessoa pessoa) throws TccException;
 	
+	public Pessoa findCliente (String documento, String telefone) throws TccException;
+	
 }
