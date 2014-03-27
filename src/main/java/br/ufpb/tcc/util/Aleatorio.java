@@ -3,6 +3,7 @@ package br.ufpb.tcc.util;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
+import java.util.UUID;
 
 import br.ufpb.tcc.model.Telefone;
 
@@ -74,5 +75,9 @@ public class Aleatorio {
 		int x = random.nextInt(max - min + 1) + min;
 				
 		return x;
+	}
+	
+	public static UUID geraUuid(){
+		return UUID.randomUUID();
 	}
 }
