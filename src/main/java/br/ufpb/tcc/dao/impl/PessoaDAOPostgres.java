@@ -103,7 +103,7 @@ public class PessoaDAOPostgres implements PessoaDAO {
         }
 	}
 
-	public Pessoa findOne(Pessoa entidade) throws TccException {
+	public Pessoa findOne(Integer id) throws TccException {
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 		
@@ -114,7 +114,7 @@ public class PessoaDAOPostgres implements PessoaDAO {
 			String sql = "SELECT * FROM pessoa WHERE id = ?";
 			            
 			pstm = conn.prepareStatement(sql);
-			pstm.setInt(1, entidade.getId());
+			pstm.setInt(1, id);
             
 			rs = pstm.executeQuery();
             if(rs.next()) {

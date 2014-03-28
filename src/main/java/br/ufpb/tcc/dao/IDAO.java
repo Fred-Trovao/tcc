@@ -13,7 +13,7 @@ public interface IDAO<T> {
     
     void deleteAll() throws TccException;
  
-    T findOne(T entity) throws TccException;
+    T findOne(Integer id) throws TccException;
  
     List<T> findAll() throws TccException ;
 }

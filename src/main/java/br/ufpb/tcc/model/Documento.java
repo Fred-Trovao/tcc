@@ -1,6 +1,5 @@
 package br.ufpb.tcc.model;
 
-import java.util.UUID;
 
 public class Documento {
 
@@ -38,5 +37,9 @@ public class Documento {
 	}
 	public void setTipo(byte tipo) {
 		this.tipo = tipo;
+	}
+	@Override
+	public String toString() {
+		return "Documento [numero=" + numero + ", tipo=" + tipo + "]";
 	}
 }

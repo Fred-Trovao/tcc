@@ -78,4 +78,9 @@ public class Pessoa implements Serializable {
 			this.telefones.remove(telefone);
 		}
 	}
+
+	public String toString() {
+		return "Pessoa [nome=" + nome + ", nascimento=" + nascimento
+				+ ", telefones=" + telefones + ", documento=" + documento + "]";
+	}
 }

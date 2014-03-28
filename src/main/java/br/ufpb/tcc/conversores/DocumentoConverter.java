@@ -1,10 +1,12 @@
 package br.ufpb.tcc.conversores;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import br.ufpb.tcc.model.Documento;
+import br.ufpb.tcc.util.TccException;
 
 public class DocumentoConverter {
 	public Map<String, Object> converterToMap(Documento documento) {
@@ -34,9 +36,23 @@ public class DocumentoConverter {
         return mapDocumento;
     }
     
-    public Set<Documento> converterToSetDocumentoCassandra(HashMap<Integer, String> hashMap){
-    	//hashMap.g 
-    	return null;
+    public Set<Documento> converterToSetDocumentoCassandra(HashMap<Integer, String> hashMap) throws TccException{
+    	
+    	if(hashMap == null){
+    		throw new TccException("Mapa nulo");
+    	}
+    	
+    	Set<Documento> documentos = new HashSet<Documento>();
+    	
+    	for(Integer chave : hashMap.keySet()){
+    		Documento doc = new Documento();
+    		doc.setTipo(chave.byteValue());
+    		doc.setNumero(hashMap.get(chave));
+    		
+    		documentos.add(doc);
+    	}
+    	
+    	return documentos;
     }
     
     public static void main(String[] args){

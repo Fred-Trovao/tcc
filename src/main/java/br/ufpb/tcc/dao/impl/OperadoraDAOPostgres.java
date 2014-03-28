@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import br.ufpb.tcc.dao.OperadoraDAO;
 import br.ufpb.tcc.model.Documento;
@@ -103,7 +104,7 @@ public class OperadoraDAOPostgres implements OperadoraDAO {
 
 	}
 
-	public Operadora findOne(Operadora entidade) throws TccException {
+	public Operadora findOne(Integer id) throws TccException {
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 		
@@ -113,7 +114,7 @@ public class OperadoraDAOPostgres implements OperadoraDAO {
 			String sql = "SELECT * FROM operadora WHERE id = ?";
 			            
 			pstm = conn.prepareStatement(sql);
-			pstm.setInt(1, entidade.getId());
+			pstm.setInt(1, id);
             
 			rs = pstm.executeQuery();
             if(rs.next()) {
@@ -170,5 +171,20 @@ public class OperadoraDAOPostgres implements OperadoraDAO {
         } finally {
             ConexaoPostgres.closeConexao(pstm);
         }		
+	}
+
+	@Override
+	public Operadora findOneComDocumento(Integer id) throws TccException {
+		Operadora operadora = findOne(id);
+		
+		if(operadora != null){
+			DocumentoOperadoraDAOPostgres dodp = new DocumentoOperadoraDAOPostgres(conn);
+			Set<DocumentoOperadora> documentoOperadoras = dodp.findByOperadora(operadora);
+			
+			for(DocumentoOperadora dop : documentoOperadoras){
+				operadora.addDocumento(dop.getDocumento());
+			}
+		}
+		return operadora;
 	}
 }

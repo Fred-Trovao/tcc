@@ -4,8 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import br.ufpb.tcc.conversores.DocumentoConverter;
 import br.ufpb.tcc.dao.ClienteDAO;
 import br.ufpb.tcc.model.Documento;
+import br.ufpb.tcc.model.Operadora;
 import br.ufpb.tcc.model.Pessoa;
 import br.ufpb.tcc.model.Telefone;
 import br.ufpb.tcc.util.Aleatorio;
@@ -28,7 +30,7 @@ public class ClienteDAOCassandra implements ClienteDAO {
 			+ " razaosocial , documentos ) VALUES (?, ?, ?)";
 	private final String SELECT_PESSOA = "SELECT * FROM documento_telefone "
 			+ "WHERE documento = ? and telefone = ?";
-	private final String SELECT_Operadora = "SELECT * FROM operadora "
+	private final String SELECT_OPERADORA = "SELECT * FROM operadora "
 			+ "WHERE operadora_id = ?";
 	
 	public ClienteDAOCassandra(){
@@ -75,7 +77,7 @@ public class ClienteDAOCassandra implements ClienteDAO {
 		}
 	}
 
-	public Pessoa findCliente(String documento, String telefone){
+	public Pessoa findCliente(String documento, String telefone) throws TccException{
 		
 		PreparedStatement pstm = this.session.prepare(SELECT_PESSOA);
 		
@@ -100,18 +102,30 @@ public class ClienteDAOCassandra implements ClienteDAO {
 			tel.setNumero(row.getString("telefone"));
 			
 			pessoa.addTelefone(tel);
+			
+			try{
+				tel.setOperadora(findOperadora(row.getUUID("operadora_id")));
+			}catch(TccException e){
+				throw new TccException("Dados inconsistentes, não encontrado operadora");
+			}
 		}
 		
 		return pessoa;
 	}
 	
-	public findOperadora(UUID uuid){
-		PreparedStatement pstm = this.session.prepare(SELECT_PESSOA);
+	public Operadora findOperadora(UUID uuid) throws TccException{
+		PreparedStatement pstm = this.session.prepare(SELECT_OPERADORA);
 		
 		BoundStatement bstm = new BoundStatement(pstm);
 		
 		Row row = this.session.execute(bstm.bind(uuid)).one();
 		
-		Opera
+		Operadora operadora = new Operadora();
+		operadora.setUuid(row.getUUID("operadora_id"));
+		operadora.setRazaoSocial(row.getString("razaoSocial"));
+		operadora.setDocumentos(new DocumentoConverter()
+			.converterToSetDocumentoCassandra(new HashMap<Integer, String>(row.getMap("documentos", Integer.class, String.class))));
+		
+		return operadora;		
 	}
 }

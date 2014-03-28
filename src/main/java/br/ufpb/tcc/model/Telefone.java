@@ -53,4 +53,9 @@ public class Telefone {
 	public void setOperadora(Operadora operadora) {
 		this.operadora = operadora;
 	}
+
+	@Override
+	public String toString() {
+		return "Telefone [numero=" + numero + ", operadora=" + operadora + "]";
+	}
 }

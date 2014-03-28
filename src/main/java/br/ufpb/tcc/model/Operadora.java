@@ -10,14 +10,11 @@ public class Operadora {
 	private UUID uuid;
 	
 	private String razaoSocial;
-	
-	private Set<Telefone> telefones;
-	
+		
 	private Set<Documento> documentos;
 	
 	public Operadora(){
 		this.documentos = new HashSet<Documento>();
-		this.telefones = new HashSet<Telefone>();
 	}
 	
 	public Integer getId() {
@@ -44,12 +41,6 @@ public class Operadora {
 	public void setRazaoSocial(String razaoSocial) {
 		this.razaoSocial = razaoSocial;
 	}
-	public Set<Telefone> getTelefones() {
-		return telefones;
-	}
-	public void setTelefones(Set<Telefone> telefones) {
-		this.telefones = telefones;
-	}
 	public Set<Documento> getDocumentos() {
 		return documentos;
 	}
@@ -71,5 +62,11 @@ public class Operadora {
 
 	public void setUuid(UUID uuid) {
 		this.uuid = uuid;
+	}
+
+	@Override
+	public String toString() {
+		return "Operadora [razaoSocial=" + razaoSocial + ", documentos="
+				+ documentos + "]";
 	}
 }

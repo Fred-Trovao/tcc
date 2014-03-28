@@ -97,7 +97,7 @@ public class TelefoneDAOPostgres implements TelefoneDAO {
         }
 	}
 
-	public Telefone findOne(Telefone entidade) throws TccException {
+	public Telefone findOne(Integer id) throws TccException {
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 		
@@ -108,7 +108,7 @@ public class TelefoneDAOPostgres implements TelefoneDAO {
 			String sql = "SELECT * FROM telefone WHERE id = ?";
 			            
 			pstm = conn.prepareStatement(sql);
-			pstm.setInt(1, entidade.getId());
+			pstm.setInt(1, id);
             
 			rs = pstm.executeQuery();
             if(rs.next()) {
