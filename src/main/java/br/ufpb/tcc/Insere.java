@@ -18,7 +18,7 @@ public class Insere {
 	public static void main(String[] args) throws TccException {
 		
 		long inicio = System.currentTimeMillis();
-		createBase(1, 2, 1, 2, Bancos.POSTGRES.ordinal());
+		createBase(1, 2, 1, 2, Bancos.MONGODB.ordinal());
 		
 		long fim = System.currentTimeMillis();
 		
