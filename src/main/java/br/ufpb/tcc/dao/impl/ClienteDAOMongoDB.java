@@ -10,6 +10,7 @@ import br.ufpb.tcc.util.TccException;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 
 public class ClienteDAOMongoDB implements ClienteDAO {
 	
@@ -37,10 +38,18 @@ public class ClienteDAOMongoDB implements ClienteDAO {
 		
 		BasicDBObject search = new BasicDBObject();
 		search.put("telefones.numero", telefone);
+		search.put("documento.numero", documento);
 		
-		System.out.println(search);
-		// TODO Auto-generated method stub
-		return null;
+		DBCursor cursor = this.dbCollection.find(search);
+		
+		Pessoa pessoa = null;
+		
+		while(cursor.hasNext()){
+			pessoa = new PessoaConverter().converterToPessoa(cursor.next());
+			System.out.println(pessoa);
+		}
+		
+		return pessoa;
 	}
 
 }

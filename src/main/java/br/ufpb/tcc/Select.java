@@ -16,7 +16,8 @@ public class Select {
 		try {
 			cd = DAOFactory.criarClienteDAO(Bancos.MONGODB.ordinal());
 			
-			Pessoa pessoa = cd.findCliente("5141043702", "8039496850");
+			Pessoa pessoa = cd.findCliente("63180356698", "5141043702");
+			
 			System.out.println(pessoa.toString());
 		} catch (TccException e) {
 			// TODO Auto-generated catch block

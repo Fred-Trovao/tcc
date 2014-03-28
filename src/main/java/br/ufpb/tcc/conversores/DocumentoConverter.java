@@ -20,7 +20,9 @@ public class DocumentoConverter {
     public Documento converterToDocumento(HashMap<String, Object> hashMap) {
         Documento documento = new Documento();
         documento.setNumero((String) hashMap.get("numero"));
-        documento.setTipo((Byte) hashMap.get("tipo"));
+        int x = (Integer) hashMap.get("tipo");
+        byte tipo = (byte) x;
+        documento.setTipo(tipo);
  
         return documento;
     }
