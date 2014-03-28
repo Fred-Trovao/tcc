@@ -1,7 +1,7 @@
-﻿DROP TABLE IF EXISTS pessoa;
 DROP TABLE IF EXISTS telefone;
-DROP TABLE IF EXISTS documento;
 DROP TABLE IF EXISTS documento_operadora;
+DROP TABLE IF EXISTS pessoa;
+DROP TABLE IF EXISTS documento;
 DROP TABLE IF EXISTS operadora;
 
 CREATE TABLE documento

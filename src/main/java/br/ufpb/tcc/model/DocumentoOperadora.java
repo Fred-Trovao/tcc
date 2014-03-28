@@ -1,7 +1,13 @@
 package br.ufpb.tcc.model;
 
-public class DocumentoOperadora {
+import java.io.Serializable;
+
+public class DocumentoOperadora implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7806848995424683214L;
 	private String id;
 	private Documento documento;
 	private Operadora operadora;

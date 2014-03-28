@@ -1,7 +1,10 @@
 package br.ufpb.tcc.model;
 
+import java.io.Serializable;
 
-public class Documento {
+public class Documento implements Serializable{
+
+	private static final long serialVersionUID = -5604567958149786910L;
 
 	private String id;
 	

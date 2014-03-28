@@ -4,11 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 import br.ufpb.tcc.dao.ClienteDAO;
 import br.ufpb.tcc.model.Documento;
-import br.ufpb.tcc.model.DocumentoOperadora;
 import br.ufpb.tcc.model.Operadora;
 import br.ufpb.tcc.model.Pessoa;
 import br.ufpb.tcc.model.Telefone;
@@ -71,31 +69,38 @@ public class ClienteDAOPostgres implements ClienteDAO {
 		
 		try {
         
-			String sql = "SELECT * FROM documento "
-					+ "inner join pessoa"
-					+ "on documento.id = pessoa.id_documento "
-					+ "inner join telefone"
-					+ "on pessoa.id = telefone.id_pessoa"
-					+ "WHERE documento.numero = ? AND telefone.numero = ?";
+			String sql = "SELECT d.id as d_id, d.numero as d_numero, "
+					+ "tipo, p.id as p_id, id_documento, "
+					+ "nome, nascimento, t.id as t_id, id_pessoa, "
+					+ "id_operadora, t.numero as t_numero FROM documento d "
+					+ "inner join pessoa p "
+					+ "on d.id = p.id_documento "
+					+ "inner join telefone t "
+					+ "on p.id = t.id_pessoa "
+					+ "WHERE d.numero = ? AND t.numero = ?";
 			            
 			pstm = conn.prepareStatement(sql);
 			pstm.setString(1, documento);
 			pstm.setString(2, telefone);
             
 			rs = pstm.executeQuery();
+			
             if(rs.next()) {
             	Documento doc = new Documento();
-            	doc.setId(rs.getInt("d.id"));
-    			doc.setNumero(rs.getString("d.numero"));
+            	doc.setId(rs.getInt("d_id"));
+    			doc.setNumero(rs.getString("d_numero"));
     			doc.setTipo((byte) rs.getInt("tipo"));
     			
-    			pessoa.setId(rs.getInt("t.id"));
+    			pessoa = new Pessoa();
+    			
+    			pessoa.setId(rs.getInt("p_id"));
     			pessoa.setNome(rs.getString("nome"));
     			pessoa.setNascimento(rs.getDate("nascimento"));
     			pessoa.setDocumento(doc);
     			
     			Telefone tel = new Telefone();
-    			tel.setNumero(rs.getString("t.numero"));
+    			tel.setId(rs.getInt("t_id"));
+    			tel.setNumero(rs.getString("t_numero"));
     			
     			pessoa.addTelefone(tel);
     			
@@ -108,7 +113,7 @@ public class ClienteDAOPostgres implements ClienteDAO {
         } catch (Exception e) {
             throw new TccException(e);
 		} finally {
-        	ConexaoPostgres.closeConexao(pstm, rs);
+        	ConexaoPostgres.closeConexao(conn, pstm, rs);
         }
 		return pessoa;
 	}

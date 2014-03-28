@@ -32,4 +32,15 @@ public class ClienteDAOMongoDB implements ClienteDAO {
         dbCollection.save(document);
 	}
 
+	public Pessoa findCliente(String documento, String telefone)
+			throws TccException {
+		
+		BasicDBObject search = new BasicDBObject();
+		search.put("telefones.numero", telefone);
+		
+		System.out.println(search);
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
