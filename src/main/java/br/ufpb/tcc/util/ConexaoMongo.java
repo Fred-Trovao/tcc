@@ -9,7 +9,7 @@ public class ConexaoMongo {
 	
 	private static final String HOST = "localhost";
     private static final int PORT = 27017;
-    private static final String DB_NAME = "tcc-mongodb";
+    private static final String DB_NAME = "tcc";
     
     private static ConexaoMongo uniqInstance;
     private static int mongoInstance = 1;

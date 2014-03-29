@@ -18,7 +18,7 @@ public class Insere {
 	public static void main(String[] args) throws TccException {
 		
 		long inicio = System.currentTimeMillis();
-		createBase(1, 2, 1, 2, Bancos.MONGODB.ordinal());
+		createBase(1000, 2, 15, 2, Bancos.CASSANDRA.ordinal());
 		
 		long fim = System.currentTimeMillis();
 		
@@ -67,14 +67,22 @@ public class Insere {
 			
 			ClienteDAO cd;
 			try {
-				cd = DAOFactory.criarClienteDAO(banco);
+				cd = DAOFactory.criarClienteDAO(Bancos.POSTGRES.ordinal());
 				
 				cd.save(pessoa);
-				System.out.println("Sucesso!");
+				
+				cd = DAOFactory.criarClienteDAO(Bancos.MONGODB.ordinal());
+				
+				cd.save(pessoa);
+				
+				cd = DAOFactory.criarClienteDAO(Bancos.CASSANDRA.ordinal());
+				
+				cd.save(pessoa);
 			} catch (TccException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		System.out.println("Sucesso!");
 	}	
 }

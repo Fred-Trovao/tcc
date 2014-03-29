@@ -10,13 +10,17 @@ public class Select {
 
 	public static void main(String[] args){
 		
+		String[] doc = {"14365954966", "08749003773", "83487329671", "80378098579", "81295992162", "43603896753", "45386638007"};
+		String[] tel = {"6449143854", "8938694666", "0717767331", "3385189797", "9866530308", "3787357154", "7797207397"};
+		
+		for(int i=0;i<doc.length;i++){
 		long inicio = System.currentTimeMillis();
 		
 		ClienteDAO cd;
 		try {
-			cd = DAOFactory.criarClienteDAO(Bancos.MONGODB.ordinal());
+			cd = DAOFactory.criarClienteDAO(Bancos.POSTGRES.ordinal());
 			
-			Pessoa pessoa = cd.findCliente("63180356698", "5141043702");
+			Pessoa pessoa = cd.findCliente(doc[i], tel[i]);
 			
 			System.out.println(pessoa.toString());
 		} catch (TccException e) {
@@ -27,6 +31,6 @@ public class Select {
 		long fim = System.currentTimeMillis();
 		
 		System.out.println(fim -inicio);
-		
+		}
 	}
 }
