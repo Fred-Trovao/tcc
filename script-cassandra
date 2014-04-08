@@ -1,3 +1,4 @@
+
 CREATE KEYSPACE tcc WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 1};
 
 USE tcc ;

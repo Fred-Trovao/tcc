@@ -16,9 +16,9 @@ import br.ufpb.tcc.util.TccException;
 public class Insere {
 
 	public static void main(String[] args) throws TccException {
-		
+		System.out.println("Processando...");
 		long inicio = System.currentTimeMillis();
-		createBase(1000, 2, 15, 2, Bancos.CASSANDRA.ordinal());
+		createBase(1000000, 2, 20, 2, Bancos.CASSANDRA.ordinal());
 		
 		long fim = System.currentTimeMillis();
 		
