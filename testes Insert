@@ -13,3 +13,16 @@ Cassandra
 
 todos
 23536533
+
+select p.id, o.id from pessoa p
+inner join documento d
+on p.id_documento = d.id
+inner join telefone t
+on p.id = t.id_pessoa
+inner join operadora o
+on t.id_operadora = o.id
+inner join documento_operadora doco
+on o.id = doco.id_operadora
+inner join documento doc
+on doco.id_documento = doc.id
+where razaoSocial = 'Bwnndl'

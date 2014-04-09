@@ -16,3 +16,6 @@ CREATE TABLE operadora
 (operadora_id uuid PRIMARY KEY,
 razaoSocial text,
 documentos map <int, text >);
+
+CREATE INDEX ON documento_telefone (nascimento) ;
+CREATE INDEX ON operadora (razaosocial) ;
