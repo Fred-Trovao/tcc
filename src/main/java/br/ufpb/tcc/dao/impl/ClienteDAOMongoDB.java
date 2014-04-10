@@ -74,4 +74,9 @@ public class ClienteDAOMongoDB implements ClienteDAO {
 		return pessoas;
 	}
 
+	public Pessoa updatePessoa(Pessoa pessoa) throws TccException {
+		save(pessoa);
+		return pessoa;
+	}
+
 }

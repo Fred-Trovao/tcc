@@ -31,7 +31,7 @@ public class PessoaConverter {
  
     public Pessoa converterToPessoa(DBObject dbo) {
         Pessoa pessoa = new Pessoa();
-        //pessoa.setId(dbo.get("_id").toString());
+        pessoa.setId(dbo.get("_id").toString());
         pessoa.setNome((String) dbo.get("nome"));
         pessoa.setNascimento((Date) dbo.get("nascimento"));
         

@@ -1,5 +1,6 @@
 package br.ufpb.tcc.dao.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,8 @@ public class ClienteDAOCassandra implements ClienteDAO {
 			+ " razaosocial , documentos ) VALUES (?, ?, ?)";
 	private final String SELECT_PESSOA = "SELECT * FROM documento_telefone "
 			+ "WHERE documento = ? and telefone = ?";
+	private final String SELECT_PESSOA_DOCUMENTO = "SELECT telefone FROM documento_telefone "
+			+ "WHERE documento = ?";
 	private final String SELECT_OPERADORA = "SELECT * FROM operadora "
 			+ "WHERE operadora_id = ?";
 	
@@ -135,5 +138,30 @@ public class ClienteDAOCassandra implements ClienteDAO {
 			throws TccException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Pessoa updatePessoa(Pessoa pessoa) throws TccException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public List<String> findTelefonesPorDocumento(String documento) throws TccException{
+		PreparedStatement pstm = this.session.prepare(SELECT_PESSOA_DOCUMENTO);
+		
+		BoundStatement bstm = new BoundStatement(pstm);
+		
+		ResultSet rs = this.session.execute(bstm.bind(documento));
+		
+		List<String> telefones = new ArrayList<String>();
+		
+		for (Row row : rs) {
+			
+			String telefone = row.getString("telefone");
+						
+			telefones.add(telefone);
+		}
+		
+		return telefones;
 	}
 }

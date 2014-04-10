@@ -201,4 +201,22 @@ public class ClienteDAOPostgres implements ClienteDAO {
 		
 		return findTopN(operadora, quantidade);
 	}
+
+	public Pessoa updatePessoa(Pessoa pessoa)
+			throws TccException {
+		
+		if(pessoa == null || pessoa.getId() == null){
+			throw new TccException("Pessoa invalida");
+		}
+		
+		try{						
+			PessoaDAOPostgres pdp = new PessoaDAOPostgres(conn);
+			pdp.update(pessoa);
+		}catch(TccException e){
+			throw new TccException(e);
+        } finally {
+            ConexaoPostgres.closeConexao(conn);
+        }
+		return pessoa;
+	}
 }

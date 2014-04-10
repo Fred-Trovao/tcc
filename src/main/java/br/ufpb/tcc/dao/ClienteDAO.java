@@ -12,4 +12,6 @@ public interface ClienteDAO {
 	public Pessoa findCliente (String documento, String telefone) throws TccException;
 	
 	public List<Pessoa> findTopN(String razaoSocial, int quantidade) throws TccException;
+	
+	public Pessoa updatePessoa(Pessoa pessoa) throws TccException;
 }
