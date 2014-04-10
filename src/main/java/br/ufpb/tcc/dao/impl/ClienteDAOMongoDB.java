@@ -1,5 +1,7 @@
 package br.ufpb.tcc.dao.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import br.ufpb.tcc.conversores.PessoaConverter;
@@ -11,6 +13,7 @@ import br.ufpb.tcc.util.TccException;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 
 public class ClienteDAOMongoDB implements ClienteDAO {
 	
@@ -46,10 +49,29 @@ public class ClienteDAOMongoDB implements ClienteDAO {
 		
 		while(cursor.hasNext()){
 			pessoa = new PessoaConverter().converterToPessoa(cursor.next());
-			System.out.println(pessoa);
 		}
 		
 		return pessoa;
+	}
+
+	@Override
+	public List<Pessoa> findTopN(String razaoSocial, int quantidade) throws TccException {
+		BasicDBObject search = new BasicDBObject();
+		search.put("telefones.operadora.razaoSocial", razaoSocial);
+		
+		BasicDBObject orderBy = new BasicDBObject("nome", 1);
+		
+		DBCursor cursor = this.dbCollection.find(search).sort(orderBy).limit(quantidade);
+		
+		List<Pessoa> pessoas = new ArrayList<Pessoa>();
+		Pessoa pessoa = null;
+		
+		while(cursor.hasNext()){
+			pessoa = new PessoaConverter().converterToPessoa(cursor.next());
+			pessoas.add(pessoa);
+		}
+		
+		return pessoas;
 	}
 
 }

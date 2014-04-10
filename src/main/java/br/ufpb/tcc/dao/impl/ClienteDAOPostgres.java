@@ -4,8 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.ufpb.tcc.dao.ClienteDAO;
+import br.ufpb.tcc.dao.OperadoraDAO;
 import br.ufpb.tcc.model.Documento;
 import br.ufpb.tcc.model.Operadora;
 import br.ufpb.tcc.model.Pessoa;
@@ -116,5 +119,86 @@ public class ClienteDAOPostgres implements ClienteDAO {
         	ConexaoPostgres.closeConexao(conn, pstm, rs);
         }
 		return pessoa;
+	}
+	
+	public List<Pessoa> findTopN(Operadora operadora, int quantidade) throws TccException{
+		
+		if(operadora == null || operadora.getId() == null){
+			throw new TccException("Parametros invalidos");
+		}
+		
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		
+		List<Pessoa> pessoas = new ArrayList<Pessoa>();
+		
+		try {
+        
+			String sql = "SELECT d.id as d_id, d.numero as d_numero, "
+					+ "tipo, p.id as p_id, id_documento, "
+					+ "nome, nascimento, t.id as t_id, id_pessoa, "
+					+ "id_operadora, t.numero as t_numero FROM documento d "
+					+ "inner join pessoa p "
+					+ "on d.id = p.id_documento "
+					+ "inner join telefone t "
+					+ "on p.id = t.id_pessoa "
+					+ "WHERE id_operadora = ? "
+					+ "ORDER BY nome "
+					+ "LIMIT ?";
+			            
+			pstm = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			pstm.setInt(1, operadora.getId());
+			pstm.setInt(2, quantidade);
+			
+			rs = pstm.executeQuery();
+			
+			boolean proximo = rs.next();
+			
+            while(proximo) {
+            	Documento doc = new Documento();
+            	doc.setId(rs.getInt("d_id"));
+    			doc.setNumero(rs.getString("d_numero"));
+    			doc.setTipo((byte) rs.getInt("tipo"));
+    			
+    			Pessoa pessoa = new Pessoa();
+    			
+    			pessoa.setId(rs.getInt("p_id"));
+    			pessoa.setNome(rs.getString("nome"));
+    			pessoa.setNascimento(rs.getDate("nascimento"));
+    			pessoa.setDocumento(doc);
+    			
+    			
+    			do{
+	    			Telefone tel = new Telefone();
+	    			tel.setId(rs.getInt("t_id"));
+	    			tel.setNumero(rs.getString("t_numero"));
+	    			
+	    			pessoa.addTelefone(tel);
+	    			
+	    			tel.setOperadora(operadora);
+	    			
+	    			if(!rs.isLast())
+	    				rs.next();
+	    			else{
+	    				proximo = false;
+	    			}
+    			}while(rs.getInt("d_id") == doc.getId() && !rs.isLast());
+    			
+    			pessoas.add(pessoa);
+            }
+            
+        } catch (Exception e) {
+            throw new TccException(e);
+		} finally {
+        	ConexaoPostgres.closeConexao(conn, pstm, rs);
+        }
+		return pessoas;
+	}
+	
+	public List<Pessoa> findTopN(String razaoSocial, int quantidade) throws TccException{
+		OperadoraDAO opd = new OperadoraDAOPostgres(conn);
+		Operadora operadora = opd.findOneComDocumento(razaoSocial);
+		
+		return findTopN(operadora, quantidade);
 	}
 }

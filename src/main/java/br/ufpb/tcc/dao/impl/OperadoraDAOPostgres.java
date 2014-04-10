@@ -187,4 +187,42 @@ public class OperadoraDAOPostgres implements OperadoraDAO {
 		}
 		return operadora;
 	}
+
+	public Operadora findOneComDocumento(String razaoSocial)
+			throws TccException {
+		Operadora operadora = findOne(razaoSocial);
+		
+		if(operadora != null){
+			operadora = findOneComDocumento(operadora.getId());
+		}
+		
+		return operadora;
+	}
+
+	public Operadora findOne(String razaoSocial) throws TccException {
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		
+		Operadora operadora = null;
+		
+		try {
+			String sql = "SELECT * FROM operadora WHERE razaoSocial = ?";
+			            
+			pstm = conn.prepareStatement(sql);
+			pstm.setString(1, razaoSocial);
+            
+			rs = pstm.executeQuery();
+            if(rs.next()) {
+                operadora = new Operadora();
+                operadora.setId(rs.getInt("id"));
+                operadora.setRazaoSocial(rs.getString("razaosocial"));
+            }
+        } catch (SQLException e) {
+        	throw new TccException(e);
+        } finally {
+        	ConexaoPostgres.closeConexao(pstm, rs);
+        }
+		
+		return operadora;
+	} 
 }

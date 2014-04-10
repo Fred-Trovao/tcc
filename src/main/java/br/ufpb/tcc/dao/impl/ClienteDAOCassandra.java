@@ -1,6 +1,7 @@
 package br.ufpb.tcc.dao.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -127,5 +128,12 @@ public class ClienteDAOCassandra implements ClienteDAO {
 			.converterToSetDocumentoCassandra(new HashMap<Integer, String>(row.getMap("documentos", Integer.class, String.class))));
 		
 		return operadora;		
+	}
+
+	@Override
+	public List<Pessoa> findTopN(String razaoSocial, int quantidade)
+			throws TccException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
