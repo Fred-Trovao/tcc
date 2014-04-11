@@ -213,10 +213,37 @@ public class ClienteDAOPostgres implements ClienteDAO {
 			PessoaDAOPostgres pdp = new PessoaDAOPostgres(conn);
 			pdp.update(pessoa);
 		}catch(TccException e){
-			throw new TccException(e);
+			throw e;
         } finally {
             ConexaoPostgres.closeConexao(conn);
         }
 		return pessoa;
+	}
+
+	public Operadora updateOperadora(Operadora operadora)
+			throws TccException {
+		
+		try {
+			OperadoraDAOPostgres odp = new OperadoraDAOPostgres(conn);
+			odp.update(operadora);
+		} catch (TccException e) {
+			throw e;
+		}finally{
+			ConexaoPostgres.closeConexao(conn);
+		}
+		return operadora;
+	}
+
+	public Operadora findOperadora(String razaoSocial) throws TccException {
+		Operadora operadora = null;
+		try {
+			OperadoraDAOPostgres odp = new OperadoraDAOPostgres(conn);
+			operadora = odp.findOne(razaoSocial);
+		} catch (TccException e) {
+			throw e;
+		}finally{
+			ConexaoPostgres.closeConexao(conn);
+		}
+		return operadora;
 	}
 }

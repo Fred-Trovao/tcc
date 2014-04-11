@@ -1,6 +1,7 @@
 package br.ufpb.tcc;
 
 import br.ufpb.tcc.dao.ClienteDAO;
+import br.ufpb.tcc.dao.impl.ClienteDAOCassandra;
 import br.ufpb.tcc.model.Pessoa;
 import br.ufpb.tcc.util.Bancos;
 import br.ufpb.tcc.util.DAOFactory;
@@ -10,22 +11,27 @@ public class updateNome {
 
 	public static void main(String[] args){
 		
-		String[] doc = {"45931735580"};
-		String[] tel = {"1226764123"};
+		String[] doc = {"82833687441"};
+		String[] tel = {"8212252567"};
 		
 		for(int i=0;i<doc.length;i++){
 		
 		ClienteDAO cd;
 		try {
-			cd = DAOFactory.criarClienteDAO(Bancos.MONGODB.ordinal());
+			cd = DAOFactory.criarClienteDAO(Bancos.CASSANDRA.ordinal());
 			
 			Pessoa pessoa = cd.findCliente(doc[i], tel[i]);
+			
+			if(cd instanceof ClienteDAOCassandra){
+				pessoa = ((ClienteDAOCassandra) cd)
+						.findTelefonesPorDocumento(pessoa.getDocumento().getNumero());
+			}
 			
 			if(pessoa != null){
 				pessoa.setNome("Fred Augusto");
 			}
 			
-			cd = DAOFactory.criarClienteDAO(Bancos.MONGODB.ordinal());
+			//cd = DAOFactory.criarClienteDAO(Bancos.CASSANDRA.ordinal());
 			
 			long inicio = System.currentTimeMillis();
 			pessoa = cd.updatePessoa(pessoa);

@@ -1,6 +1,5 @@
 package br.ufpb.tcc.dao.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +35,8 @@ public class ClienteDAOCassandra implements ClienteDAO {
 			+ "WHERE documento = ?";
 	private final String SELECT_OPERADORA = "SELECT * FROM operadora "
 			+ "WHERE operadora_id = ?";
-	
+	private final String UPDATE_NOME = "UPDATE documento_telefone "
+			+ "SET nome = ? WHERE documento = ? and telefone = ?";
 	public ClienteDAOCassandra(){
 		this.session = ConexaoCassandra.getInstance().getSession();
 	}
@@ -142,26 +142,39 @@ public class ClienteDAOCassandra implements ClienteDAO {
 
 	@Override
 	public Pessoa updatePessoa(Pessoa pessoa) throws TccException {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement pstm = this.session.prepare(UPDATE_NOME);
+		
+		BoundStatement bstm = new BoundStatement(pstm);
+		
+		for(Telefone t : pessoa.getTelefones()){
+			this.session.execute(bstm.bind(pessoa.getNome(), 
+					pessoa.getDocumento().getNumero(),
+					t.getNumero()));
+		}
+		
+		return pessoa;
 	}
 	
-	public List<String> findTelefonesPorDocumento(String documento) throws TccException{
+	public Pessoa findTelefonesPorDocumento(String documento) throws TccException{
 		PreparedStatement pstm = this.session.prepare(SELECT_PESSOA_DOCUMENTO);
 		
 		BoundStatement bstm = new BoundStatement(pstm);
 		
 		ResultSet rs = this.session.execute(bstm.bind(documento));
 		
-		List<String> telefones = new ArrayList<String>();
+		Pessoa pessoa = new Pessoa();
+		Documento doc = new Documento();
+		doc.setNumero(documento);
+		pessoa.setDocumento(doc);
 		
 		for (Row row : rs) {
 			
-			String telefone = row.getString("telefone");
-						
-			telefones.add(telefone);
+			Telefone telefone = new Telefone();
+			telefone.setNumero(row.getString("telefone"));
+			
+			pessoa.addTelefone(telefone);
 		}
 		
-		return telefones;
+		return pessoa;
 	}
 }
