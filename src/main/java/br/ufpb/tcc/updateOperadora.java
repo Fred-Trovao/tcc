@@ -1,6 +1,7 @@
 package br.ufpb.tcc;
 
 import br.ufpb.tcc.dao.ClienteDAO;
+import br.ufpb.tcc.dao.impl.ClienteDAOMongoDB;
 import br.ufpb.tcc.model.Operadora;
 import br.ufpb.tcc.util.Bancos;
 import br.ufpb.tcc.util.DAOFactory;
@@ -13,11 +14,13 @@ public class updateOperadora {
 		ClienteDAO cd;
 		try {
 			
-			int banco = Bancos.POSTGRES.ordinal();
+			int banco = Bancos.MONGODB.ordinal();
 			
 			cd = DAOFactory.criarClienteDAO(banco);
 			
-			Operadora operadora = cd.findOperadora("Gbfnzy");
+			String razaoSocial = "Tymphc";
+			
+			Operadora operadora = cd.findOperadora(razaoSocial);
 						
 			if(operadora != null){
 				operadora.setRazaoSocial("Oi");
@@ -28,7 +31,13 @@ public class updateOperadora {
 			}
 			
 			long inicio = System.currentTimeMillis();
-			operadora = cd.updateOperadora(operadora);
+			
+			if(banco == Bancos.MONGODB.ordinal()){
+				((ClienteDAOMongoDB) cd).updateOperadora(razaoSocial, operadora.getRazaoSocial());
+			}else{
+				operadora = cd.updateOperadora(operadora);
+			}
+						
 			long fim = System.currentTimeMillis();
 			
 			System.out.println(fim -inicio);

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import br.ufpb.tcc.conversores.PessoaConverter;
 import br.ufpb.tcc.dao.ClienteDAO;
+import br.ufpb.tcc.model.Operadora;
 import br.ufpb.tcc.model.Pessoa;
 import br.ufpb.tcc.util.ConexaoMongo;
 import br.ufpb.tcc.util.TccException;
@@ -77,6 +78,35 @@ public class ClienteDAOMongoDB implements ClienteDAO {
 	public Pessoa updatePessoa(Pessoa pessoa) throws TccException {
 		save(pessoa);
 		return pessoa;
+	}
+
+	public Operadora updateOperadora(Operadora operadora) throws TccException {
+				
+		return null;
+	}
+	
+	public Operadora updateOperadora(String razaoSocial, String novaRazaoSocial) throws TccException {
+		BasicDBObject update = new BasicDBObject();
+		update.put("telefones.operadora.razaoSocial", razaoSocial);
+		
+		BasicDBObject set = new BasicDBObject();
+		set.put("$set", new BasicDBObject().append("telefones.$.operadora.razaoSocial", novaRazaoSocial));
+		
+		System.out.println(set);
+		
+		this.dbCollection.update(update, set, false, true);
+		
+		Operadora operadora = new Operadora();
+		operadora.setRazaoSocial(novaRazaoSocial);
+		
+		return operadora;
+	}
+	
+	public Operadora findOperadora(String razaoSocial) throws TccException {
+		Operadora op = new Operadora();
+		op.setRazaoSocial(razaoSocial);
+		
+		return op;
 	}
 
 }
