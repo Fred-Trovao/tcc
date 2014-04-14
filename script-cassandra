@@ -18,4 +18,4 @@ razaoSocial text,
 documentos map <int, text >);
 
 CREATE INDEX ON documento_telefone (nascimento) ;
-CREATE INDEX ON operadora (razaosocial) ;
+CREATE INDEX ON operadora (razaosocial);

@@ -13,6 +13,7 @@ import com.mongodb.DBObject;
 public class PessoaConverter {
 	public Map<String, Object> converterToMap(Pessoa pessoa) {
         Map<String, Object> mapPessoa = new HashMap<String, Object>();
+        mapPessoa.put("_id", pessoa.getDocumento().getNumero());
         mapPessoa.put("nome", pessoa.getNome());
         mapPessoa.put("nascimento", pessoa.getNascimento());
         mapPessoa.put("documento", 

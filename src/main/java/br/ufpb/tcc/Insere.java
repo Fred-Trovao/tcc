@@ -18,7 +18,7 @@ public class Insere {
 	public static void main(String[] args) throws TccException {
 		System.out.println("Processando...");
 		long inicio = System.currentTimeMillis();
-		createBase(1000, 2, 5, 2, Bancos.CASSANDRA.ordinal());
+		createBase(10, 2, 5, 2, Bancos.CASSANDRA.ordinal());
 		
 		long fim = System.currentTimeMillis();
 		
@@ -50,7 +50,7 @@ public class Insere {
 			Pessoa pessoa = new Pessoa();
 			pessoa.setNome(Aleatorio.geraPalavraLetras(8)
 					+" " +Aleatorio.geraPalavraLetras(6));
-			pessoa.setNascimento(Aleatorio.geraData(1930, 2000));
+			pessoa.setNascimento(Aleatorio.geraData(1950, 2000));
 			
 			Documento documento = new Documento();
 			documento.setNumero(Aleatorio.geraPalavraNumeros(11));

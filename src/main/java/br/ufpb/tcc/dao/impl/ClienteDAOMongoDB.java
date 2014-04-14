@@ -1,6 +1,7 @@
 package br.ufpb.tcc.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import com.mongodb.QueryBuilder;
 
 public class ClienteDAOMongoDB implements ClienteDAO {
 	
@@ -41,8 +43,7 @@ public class ClienteDAOMongoDB implements ClienteDAO {
 			throws TccException {
 		
 		BasicDBObject search = new BasicDBObject();
-		search.put("telefones.numero", telefone);
-		search.put("documento.numero", documento);
+		search.put("_id", documento);
 		
 		DBCursor cursor = this.dbCollection.find(search);
 		
@@ -108,5 +109,40 @@ public class ClienteDAOMongoDB implements ClienteDAO {
 		
 		return op;
 	}
+	
+	public Pessoa findCliente(String id)
+			throws TccException {
+		
+		BasicDBObject search = new BasicDBObject();
+		search.put("_id", id);
+		
+		DBCursor cursor = this.dbCollection.find(search);
+		
+		Pessoa pessoa = null;
+		
+		while(cursor.hasNext()){
+			pessoa = new PessoaConverter().converterToPessoa(cursor.next());
+		}
+		
+		return pessoa;
+	}
 
+	@Override
+	public void deleteOne(String documento) throws TccException {
+		BasicDBObject search = new BasicDBObject();
+		search.put("_id", documento);
+		
+		this.dbCollection.remove(search);
+	}
+
+	@Override
+	public void deleteAllIdadeMenor(int anos) throws TccException {
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.YEAR, anos*-1);
+		
+		DBObject query = QueryBuilder.start("nascimento").greaterThan(c.getTime()).get();
+		
+		System.out.println(query);
+		this.dbCollection.remove(query);
+	}
 }

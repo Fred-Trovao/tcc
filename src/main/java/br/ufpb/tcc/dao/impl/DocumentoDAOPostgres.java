@@ -158,4 +158,20 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
 		}
 	}
 
+	@Override
+	public void delete(String documento) throws TccException {
+		PreparedStatement pstm = null;
+		try {
+			String sql = "DELETE FROM documento WHERE numero = ?";
+
+			pstm = conn.prepareStatement(sql);
+			pstm.setString(1, documento);
+
+			pstm.executeUpdate();
+		} catch (SQLException e) {
+			throw new TccException(e);
+		} finally {
+			ConexaoPostgres.closeConexao(pstm);
+		}		
+	}
 }

@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import br.ufpb.tcc.dao.ClienteDAO;
@@ -245,5 +246,40 @@ public class ClienteDAOPostgres implements ClienteDAO {
 			ConexaoPostgres.closeConexao(conn);
 		}
 		return operadora;
+	}
+
+	public void deleteOne(String documento) throws TccException {
+		try{
+			DocumentoDAOPostgres ddp = new DocumentoDAOPostgres(conn);
+			ddp.delete(documento);			
+		}catch(TccException e){
+			throw e;
+		}finally{
+			ConexaoPostgres.closeConexao(conn);
+		}
+	}
+
+	public void deleteAllIdadeMenor(int anos) throws TccException {
+		PreparedStatement pstm = null;
+
+		try {
+			String sql = "DELETE FROM documento where id IN "
+					+ "(select d.id from pessoa p "
+					+ "inner join documento d "
+					+ "on p.id_documento = d.id "
+					+ "WHERE nascimento > ?)";
+			
+			Calendar c = Calendar.getInstance();
+			c.add(Calendar.YEAR, anos*-1);
+			
+			pstm = conn.prepareStatement(sql);
+			pstm.setDate(1, new java.sql.Date(c.getTime().getTime()));
+			pstm.executeUpdate();
+			
+		} catch (Exception e) {
+			throw new TccException(e);
+		} finally {
+			ConexaoPostgres.closeConexao(conn, pstm);
+		}
 	}
 }

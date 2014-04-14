@@ -1,8 +1,10 @@
 package br.ufpb.tcc.dao.impl;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import br.ufpb.tcc.conversores.DocumentoConverter;
@@ -33,10 +35,21 @@ public class ClienteDAOCassandra implements ClienteDAO {
 			+ "WHERE documento = ? and telefone = ?";
 	private final String SELECT_PESSOA_DOCUMENTO = "SELECT telefone FROM documento_telefone "
 			+ "WHERE documento = ?";
+	private final String SELECT_PESSOA_OPERADORA = "SELECT documento FROM documento_telefone "
+			+ "WHERE operadora_id = ?";
 	private final String SELECT_OPERADORA = "SELECT * FROM operadora "
 			+ "WHERE operadora_id = ?";
+	private final String SELECT_OPERADORA_RS = "SELECT * FROM operadora "
+			+ "WHERE razaosocial = ?";
 	private final String UPDATE_NOME = "UPDATE documento_telefone "
 			+ "SET nome = ? WHERE documento = ? and telefone = ?";
+	private final String UPDATE_OPERADORA = "UPDATE operadora "
+			+ "SET razaosocial = ? WHERE operadora_id = ?";
+	private final String DELETE = "DELETE FROM documento_telefone "
+			+ "WHERE documento = ?";
+	private final String DELETE_OPERADORA = "DELETE FROM operadora "
+			+ "WHERE operadora_id = ?";
+	
 	public ClienteDAOCassandra(){
 		this.session = ConexaoCassandra.getInstance().getSession();
 	}
@@ -176,5 +189,65 @@ public class ClienteDAOCassandra implements ClienteDAO {
 		}
 		
 		return pessoa;
+	}
+
+	@Override
+	public Operadora updateOperadora(Operadora operadora) throws TccException {
+		PreparedStatement pstm = this.session.prepare(UPDATE_OPERADORA);
+		
+		BoundStatement bstm = new BoundStatement(pstm);
+		
+		this.session.execute(bstm.bind(operadora.getRazaoSocial(), 
+					operadora.getUuid()));
+		
+		return operadora;
+	}
+
+	@Override
+	public Operadora findOperadora(String razaoSocial) throws TccException {
+		PreparedStatement pstm = this.session.prepare(SELECT_OPERADORA_RS);
+		
+		BoundStatement bstm = new BoundStatement(pstm);
+		
+		Row row = this.session.execute(bstm.bind(razaoSocial)).one();
+		
+		Operadora operadora = new Operadora();
+		operadora.setUuid(row.getUUID("operadora_id"));
+		operadora.setRazaoSocial(row.getString("razaoSocial"));
+		operadora.setDocumentos(new DocumentoConverter()
+			.converterToSetDocumentoCassandra(new HashMap<Integer, String>(row.getMap("documentos", Integer.class, String.class))));
+		
+		return operadora;
+	}
+
+	@Override
+	public void deleteOne(String documento) throws TccException {
+		PreparedStatement pstm = this.session.prepare(DELETE);
+		
+		BoundStatement bstm = new BoundStatement(pstm);
+		
+		this.session.execute(bstm.bind(documento));
+	}
+		
+	public Set<String> findDocumento(Operadora operadora){
+		PreparedStatement pstm = this.session.prepare(SELECT_PESSOA_OPERADORA);
+		
+		BoundStatement bstm = new BoundStatement(pstm);
+		
+		ResultSet rs = this.session.execute(bstm.bind(operadora.getUuid()));
+		
+		Set<String> documentos = new HashSet<String>();
+		
+		for(Row row : rs){
+			documentos.add(row.getString("documento"));
+		}
+		
+		return documentos;
+	}
+
+	@Override
+	public void deleteAllIdadeMenor(int anos) throws TccException {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -14,23 +14,23 @@ public class updateOperadora {
 		ClienteDAO cd;
 		try {
 			
-			int banco = Bancos.MONGODB.ordinal();
+			int banco = Bancos.CASSANDRA.ordinal();
 			
 			cd = DAOFactory.criarClienteDAO(banco);
 			
-			String razaoSocial = "Tymphc";
+			long inicio = System.currentTimeMillis();
+			
+			String razaoSocial = "Gxvxej";
 			
 			Operadora operadora = cd.findOperadora(razaoSocial);
 						
 			if(operadora != null){
-				operadora.setRazaoSocial("Oi");
+				operadora.setRazaoSocial("Net");
 			}
 			
 			if(banco == Bancos.POSTGRES.ordinal()){
 				cd = DAOFactory.criarClienteDAO(Bancos.POSTGRES.ordinal());
 			}
-			
-			long inicio = System.currentTimeMillis();
 			
 			if(banco == Bancos.MONGODB.ordinal()){
 				((ClienteDAOMongoDB) cd).updateOperadora(razaoSocial, operadora.getRazaoSocial());

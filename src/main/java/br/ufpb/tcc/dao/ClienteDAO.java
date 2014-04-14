@@ -19,4 +19,8 @@ public interface ClienteDAO {
 	public Operadora updateOperadora(Operadora operadora) throws TccException;
 	
 	public Operadora findOperadora(String razaoSocial) throws TccException;
+	
+	public void deleteOne(String documento) throws TccException;
+	
+	public void deleteAllIdadeMenor(int anos) throws TccException;
 }

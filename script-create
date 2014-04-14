@@ -19,7 +19,7 @@ id_documento INTEGER NOT NULL,
 nome varchar(255) NOT NULL,
 nascimento date NOT NULL,
 CONSTRAINT pk_pessoa PRIMARY KEY (id),
-CONSTRAINT fk_pessoa_documento FOREIGN KEY (id_documento) REFERENCES documento(id)
+CONSTRAINT fk_pessoa_documento FOREIGN KEY (id_documento) REFERENCES documento(id) ON DELETE CASCADE
 );
 
 CREATE TABLE operadora
@@ -35,8 +35,8 @@ id SERIAL NOT NULL,
 id_documento INTEGER NOT NULL,
 id_operadora INTEGER NOT NULL,
 CONSTRAINT pk_documento_operadora PRIMARY KEY (id),
-CONSTRAINT fk_documento_operadora_documento FOREIGN KEY (id_documento) REFERENCES documento(id) ON DELETE RESTRICT,
-CONSTRAINT fk_documento_operadora_operadora FOREIGN KEY (id_operadora) REFERENCES operadora(id) ON DELETE RESTRICT
+CONSTRAINT fk_documento_operadora_documento FOREIGN KEY (id_documento) REFERENCES documento(id) ON DELETE CASCADE,
+CONSTRAINT fk_documento_operadora_operadora FOREIGN KEY (id_operadora) REFERENCES operadora(id) ON DELETE CASCADE
 );
 
 CREATE TABLE telefone
@@ -46,6 +46,6 @@ id_pessoa INTEGER NOT NULL,
 id_operadora INTEGER NOT NULL,
 numero varchar(11) NOT NULL,
 CONSTRAINT pk_telefone PRIMARY KEY (id),
-CONSTRAINT fk_telefone_pessoa FOREIGN KEY (id_pessoa) REFERENCES pessoa(id) ON DELETE RESTRICT,
-CONSTRAINT fk_telefone_operadora FOREIGN KEY (id_operadora) REFERENCES operadora(id) ON DELETE RESTRICT
+CONSTRAINT fk_telefone_pessoa FOREIGN KEY (id_pessoa) REFERENCES pessoa(id) ON DELETE CASCADE,
+CONSTRAINT fk_telefone_operadora FOREIGN KEY (id_operadora) REFERENCES operadora(id) ON DELETE CASCADE
 );

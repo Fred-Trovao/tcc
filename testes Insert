@@ -1,3 +1,4 @@
+--Insert
 Postgres
 
 1000, 2, 5, 2       - 23097
@@ -13,16 +14,70 @@ Cassandra
 
 todos
 23536533
+17870389
 
-select p.id, o.id from pessoa p
-inner join documento d
-on p.id_documento = d.id
-inner join telefone t
-on p.id = t.id_pessoa
-inner join operadora o
-on t.id_operadora = o.id
-inner join documento_operadora doco
-on o.id = doco.id_operadora
-inner join documento doc
-on doco.id_documento = doc.id
-where razaoSocial = 'Bwnndl'
+--select
+
+Postgres
+
+1000000		- 945
+
+Mongo
+
+1000000		- 124
+
+Cassandra
+
+1000000		- 98
+
+--select top 50
+
+PostGres
+
+1000000		- 6297
+
+Mongo
+
+1000000		- 12813
+
+-- update nome
+
+Postgres
+
+1000000		- 916
+
+Mongo
+
+1000000		- 76
+
+Cassandra
+
+1000000		- 79
+
+-- update operadora
+
+Postgres
+
+1000000		- 142
+
+Mongo
+
+1000000		- 33591
+
+Cassandra
+
+1000000		- 111
+
+--delete
+
+Postgres
+
+1000000		- 1500
+
+Mongo
+
+1000000		- 172
+
+Cassandra
+
+1000000		- 15
