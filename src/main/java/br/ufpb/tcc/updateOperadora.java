@@ -10,7 +10,10 @@ import br.ufpb.tcc.util.TccException;
 public class updateOperadora {
 
 	public static void main(String[] args){
-			
+		String[] ops = {"Hujbtv","Uucupy","Slnldu","Zcbbgr","Dtgior","Sfrjso","Zkgeir","Zurpkh","Lcmztl","Dqyroz"};
+		
+		long soma = 0;
+		for(int i=0;i<ops.length;i++){
 		ClienteDAO cd;
 		try {
 			
@@ -20,12 +23,12 @@ public class updateOperadora {
 			
 			long inicio = System.currentTimeMillis();
 			
-			String razaoSocial = "Gxvxej";
+			String razaoSocial = ops[i];
 			
 			Operadora operadora = cd.findOperadora(razaoSocial);
 						
 			if(operadora != null){
-				operadora.setRazaoSocial("Net");
+				operadora.setRazaoSocial(razaoSocial.toUpperCase());
 			}
 			
 			if(banco == Bancos.POSTGRES.ordinal()){
@@ -40,6 +43,9 @@ public class updateOperadora {
 						
 			long fim = System.currentTimeMillis();
 			
+			if(i>0)
+				soma = soma + fim -inicio;
+			
 			System.out.println(fim -inicio);
 			
 			System.out.println(operadora.toString());
@@ -47,5 +53,7 @@ public class updateOperadora {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		}
+		System.out.println("Media : " + (soma/(ops.length -1)));
 	}
 }

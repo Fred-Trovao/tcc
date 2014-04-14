@@ -18,7 +18,7 @@ public class Insere {
 	public static void main(String[] args) throws TccException {
 		System.out.println("Processando...");
 		long inicio = System.currentTimeMillis();
-		createBase(10, 2, 5, 2, Bancos.CASSANDRA.ordinal());
+		createBase(100000, 2, 15, 2, Bancos.CASSANDRA.ordinal());
 		
 		long fim = System.currentTimeMillis();
 		

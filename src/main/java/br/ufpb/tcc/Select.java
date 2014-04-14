@@ -10,8 +10,8 @@ public class Select {
 
 	public static void main(String[] args){
 		
-		String[] doc = {"65227311605", "77153620196", "29857597747", "10031603452","70851973650","86213959228","61825293523","79421315730","37314487821","57726608994"};
-		String[] tel = {"5285373129","8330927207", "8425058065","0746864313","1696972425","2080752245","9688896872","1332028991","3245194239","5450094652"};
+		String[] doc = {"74570931901","19089096875","52210523997","28490786482","49309597620","37031654479","78003000007","96104006645","47467416898","60776958145"};
+		String[] tel = {"9005739173","3578295097","0896091202","4856819642","2846926184","1896265384","3854285706","4671430370","0219972675","1507759034"};
 		
 		long soma = 0;
 		for(int i=0;i<doc.length;i++){
@@ -20,7 +20,7 @@ public class Select {
 			ClienteDAO cd;
 			try {
 				System.out.println("Processando: " + i);
-				cd = DAOFactory.criarClienteDAO(Bancos.POSTGRES.ordinal());
+				cd = DAOFactory.criarClienteDAO(Bancos.CASSANDRA.ordinal());
 				
 				long inicio = System.currentTimeMillis();
 				
