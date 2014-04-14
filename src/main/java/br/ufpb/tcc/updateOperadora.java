@@ -10,7 +10,7 @@ import br.ufpb.tcc.util.TccException;
 public class updateOperadora {
 
 	public static void main(String[] args){
-		String[] ops = {"Hujbtv","Uucupy","Slnldu","Zcbbgr","Dtgior","Sfrjso","Zkgeir","Zurpkh","Lcmztl","Dqyroz"};
+		String[] ops = {"Sknduj","Wrdufm","Mldbyx","Fjbbof","Kapxvv","Nmvvna","Qocuww","Qtkvgc","Yxxfql","Utxmfs","Nshhvi","Kednwq","Zxhbou","Oxsezy","Zdsmrn"};
 		
 		long soma = 0;
 		for(int i=0;i<ops.length;i++){
