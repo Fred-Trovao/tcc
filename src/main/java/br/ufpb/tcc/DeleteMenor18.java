@@ -12,7 +12,7 @@ public class DeleteMenor18 {
 		ClienteDAO cd;
 		try {
 			
-			int banco = Bancos.POSTGRES.ordinal();
+			int banco = Bancos.MONGODB.ordinal();
 			
 			cd = DAOFactory.criarClienteDAO(banco);
 			
