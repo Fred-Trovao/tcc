@@ -23,7 +23,7 @@ public class Insere {
 		
 		this.banco = Bancos.MONGODB.ordinal();
 		
-		createBase(1000000, 2, 20, 2);
+		createBase(1000, 2, 5, 2);
 		
 		long fim = System.currentTimeMillis();
 		
