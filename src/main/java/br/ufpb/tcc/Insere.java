@@ -14,11 +14,16 @@ import br.ufpb.tcc.util.DAOFactory;
 import br.ufpb.tcc.util.TccException;
 
 public class Insere {
-
+	
+	private static int banco;
+	
 	public static void main(String[] args) throws TccException {
 		System.out.println("Processando...");
 		long inicio = System.currentTimeMillis();
-		createBase(1000000, 2, 20, 2, Bancos.MONGODB.ordinal());
+		
+		this.banco = Bancos.MONGODB.ordinal();
+		
+		createBase(1000000, 2, 20, 2);
 		
 		long fim = System.currentTimeMillis();
 		
@@ -27,7 +32,7 @@ public class Insere {
 	}
 	
 	public static void createBase(int qtdPessoas, int qtdTelefones, 
-			int qtdOperadoras, int qtdDocOperadora, int banco){
+			int qtdOperadoras, int qtdDocOperadora){
 		
 		List<Operadora> operadoras = new ArrayList<Operadora>();
 				
